@@ -29,6 +29,10 @@ docker-compose.dev.yml    development: publishes the database on localhost
 docs/public-api.md      the public API the catalog reads
 ```
 
+## Online demo
+
+https://nyxisdev.github.io/inventory_management_system/ has links to the catalog (built-in demo data) and the Build Day pitch. `.github/workflows/pages.yml` builds it on every push to `main`: the catalog as an SPA (`npm run build:pages`, hash URLs), the links page from `deploy/pages/` and the slides from `pitch/`. The admin app needs the backend, so it is not in the static demo.
+
 ## Quick look: the catalog on demo data
 
 Needs only Node.js 24 (or Docker). No database, no backend.

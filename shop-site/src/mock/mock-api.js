@@ -28,7 +28,8 @@ function formatQty(n) {
 function imagesOf(product) {
   const out = []
   for (let i = 1; i <= product.imageCount; i++) {
-    const url = `/mock/products/${product.slug}-${i}.svg`
+    // BASE_URL is '/' normally and the sub-path on GitHub Pages.
+    const url = `${import.meta.env.BASE_URL}mock/products/${product.slug}-${i}.svg`
     out.push({ url, thumb_url: url, is_main: i === 1 })
   }
   return out

@@ -103,9 +103,17 @@
   /* Slide 3: where it lives */
   .s3 { flex-direction: column; justify-content: center; gap: 1.6em; }
   .s3 .row { display: flex; align-items: baseline; gap: 1em; }
+  .s3 .value { font-size: 3em; }
   .s3 .label { flex: 0 0 9em; font-size: 1.3em; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
   .s3 .value { font-family: Outfit, sans-serif; font-weight: 700; font-size: 3.4em; line-height: 1.1; }
   .s3 .row + .row { border-top: 1px solid var(--border); padding-top: 0.6em; }
+  .s3 { padding-right: 34%; }
+  .qr {
+    position: absolute; right: 7%; top: 50%; transform: translateY(-50%);
+    width: 22%; margin: 0; text-align: center;
+  }
+  .qr img { display: block; width: 100%; background: #fff; border-radius: 0.8em; padding: 0.4em; }
+  .qr figcaption { margin-top: 0.8em; font-size: 1.3em; font-weight: 600; color: var(--orange); }
 
   .counter {
     position: absolute; right: 2.5%; bottom: 3.5%;
@@ -139,6 +147,10 @@
   </section>
 
   <section class="slide s3" aria-label="Slide 3: Kde to žije">
+    <figure class="qr">
+      <img src="qr-katalog.svg" alt="QR kód na demo katalógu">
+      <figcaption>Vyskúšajte demo</figcaption>
+    </figure>
     <div class="row"><span class="label">Pre koho</span><span class="value">Menšie predajne stavebnín</span></div>
     <div class="row"><span class="label">Namiesto</span><span class="value">telefonátov</span></div>
     <div class="row"><span class="label">Ďalej</span><span class="value accent">spustiť naostro v&nbsp;Čuhujive</span></div>

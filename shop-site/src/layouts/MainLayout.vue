@@ -1,8 +1,8 @@
 <template>
   <div class="main-layout">
-    <a href="#main" class="skip-link">{{ t('nav.skipToContent') }}</a>
+    <a href="#main" class="skip-link" @click.prevent="skipToContent">{{ t('nav.skipToContent') }}</a>
     <SiteHeader @open-menu="menuOpen = true" />
-    <main id="main" class="main-layout__content" tabindex="-1">
+    <main id="main" ref="mainRef" class="main-layout__content" tabindex="-1">
       <router-view />
     </main>
     <SiteFooter />
@@ -28,6 +28,14 @@ defineOptions({
 
 const { t } = useI18n()
 const menuOpen = ref(false)
+const mainRef = ref(null)
+
+// Move focus without touching the URL: with hash routing (static demo build)
+// "#main" would be read as a route and open the 404 page.
+function skipToContent() {
+  mainRef.value?.focus()
+  mainRef.value?.scrollIntoView()
+}
 </script>
 
 <style lang="scss" scoped>

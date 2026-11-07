@@ -1,0 +1,64 @@
+name: Demo on GitHub Pages
+
+# Static demo: links page, catalog (SPA on built-in demo data) and the
+# Build Day pitch. No backend, no secrets. The admin app needs the backend
+# API, so it is not part of this static demo.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+env:
+  REPO_BASE: /${{ github.event.repository.name }}/
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+
+      - name: Build catalog (SPA, demo data)
+        working-directory: shop-site
+        env:
+          PAGES_BASE: ${{ env.REPO_BASE }}catalog/
+        run: |
+          npm ci
+          npm run build:pages
+
+      - name: Assemble site
+        run: |
+          mkdir -p _site
+          cp deploy/pages/index.html _site/
+          cp -r shop-site/dist/spa _site/catalog
+          cp -r pitch _site/pitch
+          touch _site/.nojekyll
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

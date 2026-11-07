@@ -18,6 +18,8 @@ export default defineConfig(() => ({
       node: 'node22',
     },
     vueRouterMode: 'history',
+    // Only the static demo build (npm run build:pages) sets a sub-path.
+    publicPath: process.env.PAGES_BASE || '/',
   },
 
   devServer: {

@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="sk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BuildStock demo</title>
+<meta name="description" content="Odkazy na demo BuildStock: katalóg a prezentácia.">
+<link rel="icon" href="catalog/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --page: #0b1121;
+    --panel: #151d30;
+    --text: #ffffff;
+    --muted: #94a3b8;
+    --border: rgba(255, 255, 255, 0.1);
+    --orange: #ff8a00;
+    --orange-hover: #e57a00;
+    --blue: #2563eb;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--page);
+    color: var(--text);
+    font: 400 16px/1.6 Inter, system-ui, sans-serif;
+  }
+  .wrap { max-width: 1200px; margin: 0 auto; padding: 56px 16px 48px; }
+  h1, h2 { font-family: Outfit, Inter, sans-serif; font-weight: 700; line-height: 1.1; margin: 0; }
+  .brand { display: flex; align-items: center; gap: 12px; font-family: Outfit, sans-serif; font-weight: 700; font-size: 22px; }
+  .brand i { width: 40px; height: 40px; border-radius: 10px; background: var(--orange); display: grid; place-items: center; }
+  .brand svg { width: 24px; height: 24px; fill: var(--page); }
+  h1 { font-size: clamp(36px, 6vw, 60px); margin-top: 40px; max-width: 16ch; }
+  h1 span { color: var(--orange); white-space: nowrap; }
+  .lead { color: var(--muted); font-size: 18px; max-width: 60ch; margin: 16px 0 40px; }
+
+  .grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
+  @media (min-width: 640px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 960px) { .grid { grid-template-columns: repeat(3, 1fr); } }
+  a.card {
+    display: flex; flex-direction: column; gap: 10px;
+    padding: 24px; min-height: 200px;
+    background: var(--panel); border: 1px solid var(--border); border-radius: 16px;
+    color: inherit; text-decoration: none;
+    transition: transform 0.3s ease-in-out, border-color 0.3s ease-in-out;
+  }
+  a.card:hover { border-color: var(--orange); transform: translateY(-4px); }
+  a.card:focus-visible { outline: 3px solid var(--blue); outline-offset: 3px; }
+  .tag { font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--orange); }
+  .card h2 { font-size: 26px; }
+  .card p { margin: 0; color: var(--muted); }
+  .go { margin-top: auto; font-weight: 600; color: var(--orange); }
+
+  footer {
+    margin-top: 48px; padding-top: 20px; border-top: 1px solid var(--border);
+    color: var(--muted); font-size: 14px; display: flex; flex-wrap: wrap; gap: 8px 24px; justify-content: space-between;
+  }
+  footer a { color: #60a5fa; }
+  @media (prefers-reduced-motion: reduce) { a.card { transition: none; } a.card:hover { transform: none; } }
+</style>
+</head>
+<body>
+<main class="wrap">
+  <div class="brand"><i><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 2 11h3v9h5v-6h4v6h5v-9h3z"/></svg></i>BuildStock</div>
+  <h1>Sklad a katalóg <span>v jednom</span></h1>
+  <p class="lead">Skladník zapíše príjem, výdaj alebo presun a zákazník hneď vidí cenu a presný počet kusov v každom sklade. Bez telefonovania.</p>
+
+  <div class="grid">
+    <a class="card" href="catalog/?lang=sk">
+      <span class="tag">Pre zákazníkov</span>
+      <h2>Katalóg</h2>
+      <p>Produkty, ceny a zásoby podľa skladov. Slovensky aj anglicky, funguje na mobile.</p>
+      <span class="go">Otvoriť katalóg →</span>
+    </a>
+    <a class="card" href="pitch/slidy.html">
+      <span class="tag">Build Day</span>
+      <h2>Prezentácia</h2>
+      <p>Tri slidy na jednu minútu. Ovládanie šípkami, medzerníkom alebo klikom, F pre celú obrazovku.</p>
+      <span class="go">Otvoriť slidy →</span>
+    </a>
+    <a class="card" href="pitch/priprava.html">
+      <span class="tag">Na nácvik</span>
+      <h2>Príprava</h2>
+      <p>Hovorený text ku každému slidu, stopky a kontrolný zoznam pred prezentáciou.</p>
+      <span class="go">Otvoriť prípravu →</span>
+    </a>
+  </div>
+
+  <footer>
+    <span>Všetky produkty, ceny, zásoby a adresy v deme sú ukážkové.</span>
+    <a href="https://github.com/NyxisDev/inventory_management_system">Zdrojový kód na GitHube</a>
+  </footer>
+</main>
+</body>
+</html>
