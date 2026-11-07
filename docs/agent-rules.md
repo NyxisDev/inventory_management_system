@@ -116,7 +116,7 @@ Reference: https://budmaster.netlify.app/. Take only the style. Do not copy its 
 
 ## Deployment
 
-- `docker-compose.yml`: `db` (postgres:16, volume, healthcheck, no public port), `backend` (python:3.12-slim, runs `alembic upgrade head`, then uvicorn with 2 workers, media volume), `admin-app` (node:20 build, nginx:alpine with SPA fallback), `shop-site` (`quasar build -m ssr`, `node dist/ssr/index.js`), `nginx` as the single entry point.
+- `docker-compose.yml`: `db` (postgres:16, volume, healthcheck, no public port), `backend` (python:3.12-slim, runs `alembic upgrade head`, then uvicorn with 2 workers, media volume), `admin-app` (node:24 build, unprivileged nginx with SPA fallback), `shop-site` (`quasar build -m ssr`, `node dist/ssr/index.js` on node:24; Quasar app-vite 3 needs Node 22.22+ or 24), `nginx` as the single entry point.
 - Domains: `shop.<domain>` goes to shop-site, `admin.<domain>` to admin-app, `/api` and `/media` on both go to backend. Local run: `localhost:8080` (site) and `localhost:8081` (admin).
 - nginx: `client_max_body_size 25m`, `/media` cache 7 days, gzip, HTTPS with Let's Encrypt (certbot or Caddy).
 - Root `.env.example` lists every variable with a comment. `JWT_SECRET` and the DB password are marked "MUST BE CHANGED" with `openssl rand -hex 32`.

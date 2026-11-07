@@ -1,0 +1,358 @@
+// Global styles of the catalog site.
+// Values come from quasar.variables.scss and are also exposed as CSS variables.
+
+:root {
+  --c-page: #{$color-page};
+  --c-panel: #{$color-panel};
+  --c-panel-raised: #{$color-panel-raised};
+  --c-text: #{$color-text};
+  --c-muted: #{$color-text-muted};
+  --c-border: #{$color-border};
+  --c-border-strong: #{$color-border-strong};
+  --c-primary: #{$primary};
+  --c-primary-hover: #{$color-primary-hover};
+  --c-primary-soft: #{$color-primary-soft};
+  --c-link: #{$color-link};
+  --c-info: #{$info};
+  --c-stock-in: #{$color-stock-in};
+  --c-stock-in-bg: #{$color-stock-in-bg};
+  --c-stock-out: #{$color-stock-out};
+  --c-stock-out-bg: #{$color-stock-out-bg};
+  --font-heading: #{$font-heading};
+  --font-body: #{$font-body};
+  --radius-button: #{$radius-button};
+  --radius-card: #{$radius-card};
+  --container-max: #{$container-max};
+  --header-height: #{$header-height};
+  --transition: #{$transition};
+  --glow-primary: #{$glow-primary};
+}
+
+html {
+  font-size: $font-size-base;
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background: $color-page;
+  color: $color-text;
+  font-family: $font-body;
+  font-size: 1rem;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1,
+h2,
+h3,
+h4,
+.font-heading {
+  font-family: $font-heading;
+  font-weight: 700;
+  color: $color-text;
+  margin: 0;
+}
+
+h1 {
+  font-size: clamp(2.25rem, 6vw, $h1-size);
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+}
+
+h2 {
+  font-size: clamp(1.75rem, 4vw, $h2-size);
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+}
+
+h3 {
+  font-size: $h3-size;
+  line-height: 1.3;
+}
+
+p {
+  margin: 0;
+}
+
+a {
+  color: $color-link;
+  text-decoration: none;
+  transition: color $transition;
+
+  &:hover {
+    color: #93c5fd;
+  }
+}
+
+::selection {
+  background: rgba(255, 138, 0, 0.35);
+  color: #fff;
+}
+
+:focus-visible {
+  outline: 2px solid $primary;
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+.text-muted {
+  color: $color-text-muted;
+}
+
+.text-orange {
+  color: $primary;
+}
+
+// Layout helpers
+
+.container {
+  width: 100%;
+  max-width: $container-max;
+  margin: 0 auto;
+  padding: 0 $gutter;
+
+  @media (min-width: 768px) {
+    padding: 0 24px;
+  }
+}
+
+.section {
+  padding: $section-space-mobile 0;
+
+  @media (min-width: 1024px) {
+    padding: $section-space 0;
+  }
+
+  &--page {
+    background: $color-page;
+  }
+
+  &--panel {
+    background: $color-panel;
+  }
+}
+
+.section-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 40px;
+
+  &__text {
+    max-width: 640px;
+  }
+
+  p {
+    margin-top: 12px;
+    color: $color-text-muted;
+  }
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: $primary;
+  margin-bottom: 12px;
+
+  &::before {
+    content: '';
+    width: 24px;
+    height: 2px;
+    background: $primary;
+    border-radius: 2px;
+  }
+}
+
+// Buttons (applied on top of QBtn)
+
+.btn {
+  border-radius: $radius-button !important;
+  font-weight: 600;
+  font-size: 1rem;
+  letter-spacing: 0;
+  text-transform: none;
+  min-height: 48px;
+  padding: 0 22px;
+  transition:
+    background-color $transition,
+    box-shadow $transition,
+    border-color $transition,
+    transform $transition;
+
+  &--primary {
+    background: $primary !important;
+    color: #fff !important;
+    box-shadow: $glow-primary;
+
+    &:hover {
+      background: $color-primary-hover !important;
+      box-shadow: $glow-primary-hover;
+    }
+  }
+
+  &--outline {
+    background: transparent !important;
+    color: #fff !important;
+    border: 1px solid $color-border-strong;
+
+    &:hover {
+      border-color: $primary;
+      color: $primary !important;
+    }
+  }
+
+  &--sm {
+    min-height: 40px;
+    padding: 0 16px;
+    font-size: 0.9375rem;
+  }
+
+  // Quasar draws its own hover overlay; we use colours instead
+  .q-focus-helper {
+    display: none;
+  }
+}
+
+// Card base
+
+.card {
+  background: $color-page;
+  border: 1px solid $color-border;
+  border-radius: $radius-card;
+  transition:
+    border-color $transition,
+    transform $transition,
+    background-color $transition;
+
+  &--panel {
+    background: $color-panel;
+  }
+
+  &--interactive:hover,
+  &--interactive:focus-within {
+    border-color: $primary;
+    transform: translateY(-4px);
+  }
+}
+
+// Fields
+
+.field-dark {
+  .q-field__control {
+    border-radius: $radius-button;
+    background: $color-page;
+  }
+
+  &.q-field--outlined .q-field__control::before {
+    border-color: $color-border-strong;
+  }
+
+  &.q-field--outlined:hover .q-field__control::before {
+    border-color: rgba(255, 255, 255, 0.32);
+  }
+}
+
+// Fade-up on scroll (see boot/reveal.js). Hidden only when JS has run.
+
+.reveal-pending {
+  opacity: 0;
+  transform: translateY(24px);
+}
+
+.reveal-done {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity 0.6s ease-out,
+    transform 0.6s ease-out;
+}
+
+// Skip link
+
+.skip-link {
+  position: absolute;
+  left: 16px;
+  top: -60px;
+  z-index: 3000;
+  padding: 10px 16px;
+  border-radius: $radius-button;
+  background: $primary;
+  color: #fff;
+  font-weight: 600;
+
+  &:focus {
+    top: 16px;
+    color: #fff;
+  }
+}
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+// Quasar overrides for the dark theme
+
+.q-breadcrumbs {
+  font-size: 0.875rem;
+  color: $color-text-muted;
+
+  .q-breadcrumbs__el {
+    color: $color-text-muted;
+  }
+
+  a.q-breadcrumbs__el:hover {
+    color: $primary;
+  }
+
+  .q-breadcrumbs--last .q-breadcrumbs__el {
+    color: $color-text;
+  }
+}
+
+.q-menu {
+  background: $color-panel;
+  border: 1px solid $color-border;
+  border-radius: 12px;
+}
+
+.q-skeleton--dark {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .reveal-pending {
+    opacity: 1;
+    transform: none;
+  }
+
+  .card--interactive:hover,
+  .card--interactive:focus-within {
+    transform: none;
+  }
+}

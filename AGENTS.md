@@ -9,8 +9,9 @@ Multi-warehouse inventory management with a public product catalog. Staff record
 ```
 backend/            Python 3.12, FastAPI, SQLAlchemy 2.0 (async), Alembic, Pydantic v2, PostgreSQL 16
 admin-app/          Vue 3 + Quasar 2 (Vite, <script setup>, Pinia, Vue Router, Axios), for employees
-shop-site/          Vue 3 + Quasar 2 in SSR mode, public catalog
-docker-compose.yml  postgres, backend, admin-app, shop-site, nginx
+shop-site/          Vue 3 + Quasar 2 in SSR mode (app-vite 3, Hono server), public catalog; demo data when MOCK_API=true
+docker-compose.yml  postgres, backend, admin-app, shop-site, nginx (+ .https / .demo / .dev variants)
+nginx/, deploy/     nginx templates and snippets; backend and admin Dockerfiles, Caddyfile
 ```
 
 Do not change the stack or the database schema without the user's consent.
@@ -21,6 +22,7 @@ Do not change the stack or the database schema without the user's consent.
 | --- | --- |
 | Task spec per part (Russian, source of truth) | `docs/deepseek-prompts.md`. Never read it whole (~15k tokens). Find the part with Grep `^## Часть`, then Read with offset and limit. |
 | Detailed rules: security, database, backend, audit log, frontend, design, deployment | `docs/agent-rules.md`. Grep `^## `, read one section. |
+| Public API contract the catalog reads (shapes, additions) | `docs/public-api.md` |
 | Progress | `ROADMAP.md` |
 
 Build order: parts 0 → 7 of the prompts, strictly in sequence. Each part ends with a "Проверь" line: run that check before calling the part done, then tick `ROADMAP.md`.

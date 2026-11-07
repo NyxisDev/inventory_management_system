@@ -1,0 +1,87 @@
+# Whole system: docker compose up -d --build
+# Catalog only, on demo data (no backend needed): make demo
+# Settings come from .env (copy .env.example and change the marked values).
+name: inventory
+
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-inventory}
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      # Creates the app_owner / app_user roles on the first start (backend/db/init_roles.sql).
+      - ./backend/db:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    # No published port: the database is reachable only from the backend network.
+    networks: [data]
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: ../deploy/backend.Dockerfile
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      MEDIA_DIR: /app/media
+    volumes:
+      - media:/app/media
+    depends_on:
+      db:
+        condition: service_healthy
+    networks: [data, web]
+
+  admin-app:
+    build:
+      context: ./admin-app
+      dockerfile: ../deploy/admin-app.Dockerfile
+    restart: unless-stopped
+    networks: [web]
+
+  shop-site:
+    build: ./shop-site
+    restart: unless-stopped
+    environment:
+      API_URL: http://backend:8000
+      MOCK_API: ${SHOP_MOCK_API:-false}
+      SITE_NAME: ${SITE_NAME:-BuildStock}
+      SITE_URL: ${SITE_URL:-http://localhost:8080}
+      SHOP_PHONE: ${SHOP_PHONE:-}
+      SHOP_EMAIL: ${SHOP_EMAIL:-}
+      SHOP_ADDRESS: ${SHOP_ADDRESS:-}
+      SHOP_HOURS: ${SHOP_HOURS:-}
+      CURRENCY: ${CURRENCY:-EUR}
+    networks: [web]
+
+  nginx:
+    image: nginxinc/nginx-unprivileged:1.27-alpine
+    restart: unless-stopped
+    environment:
+      SHOP_DOMAIN: ${SHOP_DOMAIN:-shop.localhost}
+      ADMIN_DOMAIN: ${ADMIN_DOMAIN:-admin.localhost}
+    volumes:
+      - ./nginx/templates:/etc/nginx/templates:ro
+      - ./nginx/snippets:/etc/nginx/snippets:ro
+    ports:
+      # Local access. On a server keep BIND_ADDRESS=127.0.0.1 and let Caddy
+      # (docker-compose.https.yml) publish ports 80/443.
+      - "${BIND_ADDRESS:-127.0.0.1}:${SHOP_PORT:-8080}:8080"
+      - "${BIND_ADDRESS:-127.0.0.1}:${ADMIN_PORT:-8081}:8081"
+    networks: [web]
+
+volumes:
+  pgdata:
+  media:
+
+networks:
+  # Database network: no internet access, not reachable from nginx.
+  data:
+    internal: true
+  web:

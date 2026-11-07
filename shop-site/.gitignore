@@ -1,0 +1,4 @@
+.quasar
+node_modules
+dist
+src-ssr/node_modules

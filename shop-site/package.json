@@ -1,0 +1,40 @@
+{
+  "name": "shop-site",
+  "version": "0.1.0",
+  "description": "Public catalog of the inventory management system (Quasar SSR)",
+  "productName": "Catalog",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "quasar dev -m ssr",
+    "build": "quasar build -m ssr",
+    "start": "node dist/ssr/index.js",
+    "lint": "eslint -c ./eslint.config.js \"./src*/**/*.{js,cjs,mjs,vue}\"",
+    "format": "prettier --write \"**/*.{js,vue,scss,html,md,json}\" --ignore-path .gitignore",
+    "postinstall": "quasar prepare"
+  },
+  "engines": {
+    "node": "^24 || ^22.22.0",
+    "npm": ">= 10"
+  },
+  "dependencies": {
+    "@quasar/extras": "2.1.0",
+    "axios": "1.21.0",
+    "isomorphic-dompurify": "4.7.0",
+    "pinia": "3.0.4",
+    "quasar": "2.35.2",
+    "vue": "3.5.45",
+    "vue-i18n": "11.4.18",
+    "vue-router": "5.4.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "9.39.1",
+    "@quasar/app-vite": "3.10.3",
+    "eslint": "9.39.5",
+    "eslint-plugin-vue": "10.12.0",
+    "globals": "17.14.0",
+    "prettier": "3.9.10",
+    "sass-embedded": "1.108.1",
+    "vue-eslint-parser": "10.4.2"
+  }
+}

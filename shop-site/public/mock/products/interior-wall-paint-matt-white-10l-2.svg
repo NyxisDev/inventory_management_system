@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" role="img" aria-label="Interior wall paint, matt white, 10 l (texture illustration)">
+<defs>
+  <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1b2540"/><stop offset="1" stop-color="#0f172a"/></linearGradient>
+  <radialGradient id="glow" cx="0.5" cy="0.55" r="0.5"><stop offset="0" stop-color="#ff8a00" stop-opacity="0.22"/><stop offset="1" stop-color="#ff8a00" stop-opacity="0"/></radialGradient>
+  <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0H0V40" fill="none" stroke="#ffffff" stroke-opacity="0.04"/></pattern>
+  <linearGradient id="tubeShade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff" stop-opacity="0.28"/><stop offset="0.45" stop-color="#ffffff" stop-opacity="0"/><stop offset="1" stop-color="#000000" stop-opacity="0.35"/></linearGradient>
+  <linearGradient id="cylShade" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#000000" stop-opacity="0.35"/><stop offset="0.35" stop-color="#ffffff" stop-opacity="0.12"/><stop offset="1" stop-color="#000000" stop-opacity="0.4"/></linearGradient>
+  <linearGradient id="cylV" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#000"/><stop offset="1" stop-color="#000"/></linearGradient><pattern id="p" width="80" height="80" patternUnits="userSpaceOnUse"><rect width="80" height="80" fill="#f1f5f9"/><circle cx="20" cy="20" r="10" fill="#f4f7fa"/><circle cx="60" cy="60" r="14" fill="#f4f7fa" opacity="0.7"/><circle cx="62" cy="18" r="4" fill="#9d9fa2" opacity="0.5"/></pattern><radialGradient id="vig" cx="0.5" cy="0.5" r="0.75"><stop offset="0.55" stop-color="#0b1121" stop-opacity="0"/><stop offset="1" stop-color="#0b1121" stop-opacity="0.75"/></radialGradient></defs>
+<rect width="800" height="600" fill="url(#p)"/>
+<rect width="800" height="600" fill="url(#vig)"/>
+</svg>

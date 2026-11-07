@@ -1,0 +1,22 @@
+# HTTPS in front of nginx. Caddy gets and renews Let's Encrypt certificates
+# by itself and redirects HTTP to HTTPS. The host name decides the site in nginx.
+{
+	email {$ACME_EMAIL}
+}
+
+(common) {
+	encode zstd gzip
+	header {
+		Strict-Transport-Security "max-age=31536000; includeSubDomains"
+		-Server
+	}
+	reverse_proxy nginx:8088
+}
+
+{$SHOP_DOMAIN} {
+	import common
+}
+
+{$ADMIN_DOMAIN} {
+	import common
+}

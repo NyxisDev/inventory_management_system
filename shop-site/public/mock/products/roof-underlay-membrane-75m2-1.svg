@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" role="img" aria-label="Breathable roof underlay membrane, 75 m² (illustration)">
+<defs>
+  <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1b2540"/><stop offset="1" stop-color="#0f172a"/></linearGradient>
+  <radialGradient id="glow" cx="0.5" cy="0.55" r="0.5"><stop offset="0" stop-color="#ff8a00" stop-opacity="0.22"/><stop offset="1" stop-color="#ff8a00" stop-opacity="0"/></radialGradient>
+  <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0H0V40" fill="none" stroke="#ffffff" stroke-opacity="0.04"/></pattern>
+  <linearGradient id="tubeShade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff" stop-opacity="0.28"/><stop offset="0.45" stop-color="#ffffff" stop-opacity="0"/><stop offset="1" stop-color="#000000" stop-opacity="0.35"/></linearGradient>
+  <linearGradient id="cylShade" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#000000" stop-opacity="0.35"/><stop offset="0.35" stop-color="#ffffff" stop-opacity="0.12"/><stop offset="1" stop-color="#000000" stop-opacity="0.4"/></linearGradient>
+  <linearGradient id="cylV" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#000"/><stop offset="1" stop-color="#000"/></linearGradient></defs>
+<rect width="800" height="600" fill="url(#bg)"/>
+<rect width="800" height="600" fill="url(#grid)"/>
+<ellipse cx="400" cy="330" rx="360" ry="260" fill="url(#glow)"/>
+<ellipse cx="400" cy="470" rx="270" ry="38" fill="#000000" opacity="0.35"/>
+<g><rect x="250" y="290" width="270" height="140" fill="#60a5fa"/><rect x="250" y="290" width="270" height="140" fill="url(#tubeShade)"/><ellipse cx="250" cy="360" rx="29.4" ry="70" fill="#487cbc"/><ellipse cx="520" cy="360" rx="29.4" ry="70" fill="#7db5fb" stroke="rgba(11,17,33,0.3)"/><ellipse cx="520" cy="360" rx="10.29" ry="24.5" fill="#0b1121" opacity="0.8"/><rect x="330" y="198" width="260" height="124" fill="#6dacfa"/><rect x="330" y="198" width="260" height="124" fill="url(#tubeShade)"/><ellipse cx="330" cy="260" rx="26.04" ry="62" fill="#5281bc"/><ellipse cx="590" cy="260" rx="26.04" ry="62" fill="#87bbfb" stroke="rgba(11,17,33,0.3)"/><ellipse cx="590" cy="260" rx="9.113999999999999" ry="21.7" fill="#0b1121" opacity="0.8"/></g>
+</svg>

@@ -1,0 +1,27 @@
+# Production add-on: HTTPS with automatic Let's Encrypt certificates (Caddy).
+# docker compose -f docker-compose.yml -f docker-compose.https.yml up -d --build
+# Needs SHOP_DOMAIN, ADMIN_DOMAIN and ACME_EMAIL in .env, and DNS A records
+# for both domains pointing to the server.
+services:
+  caddy:
+    image: caddy:2.8-alpine
+    restart: unless-stopped
+    environment:
+      SHOP_DOMAIN: ${SHOP_DOMAIN:?Set SHOP_DOMAIN in .env}
+      ADMIN_DOMAIN: ${ADMIN_DOMAIN:?Set ADMIN_DOMAIN in .env}
+      ACME_EMAIL: ${ACME_EMAIL:?Set ACME_EMAIL in .env}
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      - ./deploy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - nginx
+    networks: [web]
+
+volumes:
+  caddy_data:
+  caddy_config:

@@ -1,0 +1,53 @@
+// Design tokens of the catalog site. Change colours and sizes here only.
+// Approved design: dark theme, orange accent (see AGENTS.md, Design).
+
+// Quasar brand colours
+$primary: #ff8a00;
+$secondary: #2563eb;
+$accent: #ff8a00;
+
+$dark: #151d30;
+$dark-page: #0b1121;
+
+$positive: #22c55e;
+$negative: #f87171;
+$info: #2563eb;
+$warning: #f59e0b;
+
+// Site palette
+$color-page: #0b1121;
+$color-panel: #151d30;
+$color-panel-raised: #1b2540;
+$color-text: #ffffff;
+$color-text-muted: #94a3b8;
+$color-border: rgba(255, 255, 255, 0.1);
+$color-border-strong: rgba(255, 255, 255, 0.18);
+$color-primary-hover: #e57a00;
+$color-primary-soft: rgba(255, 138, 0, 0.12);
+$color-link: #60a5fa; // lighter blue so links on #0b1121 pass WCAG AA
+$color-stock-in: #4ade80;
+$color-stock-in-bg: rgba(34, 197, 94, 0.14);
+$color-stock-out: #94a3b8;
+$color-stock-out-bg: rgba(148, 163, 184, 0.14);
+
+// Typography
+$font-heading: 'Outfit', 'Segoe UI', system-ui, sans-serif;
+$font-body: 'Inter', 'Segoe UI', system-ui, sans-serif;
+$font-size-base: 16px;
+$h1-size: 3.2rem;
+$h2-size: 2.5rem;
+$h3-size: 1.25rem;
+
+// Shape and layout
+$radius-button: 8px;
+$radius-card: 16px;
+$container-max: 1200px;
+$header-height: 80px;
+$gutter: 16px;
+$section-space: 96px;
+$section-space-mobile: 64px;
+
+// Motion
+$transition: 0.3s ease-in-out;
+$glow-primary: 0 4px 14px rgba(255, 138, 0, 0.3);
+$glow-primary-hover: 0 6px 20px rgba(255, 138, 0, 0.42);

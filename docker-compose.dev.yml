@@ -1,0 +1,9 @@
+# Development only: publish PostgreSQL on 127.0.0.1:5432 for a backend running on the host.
+# docker compose -f docker-compose.yml -f docker-compose.dev.yml up -d db
+# Never use this file on a server.
+services:
+  db:
+    ports:
+      - "127.0.0.1:5432:5432"
+    # The "data" network is internal (no published ports), so join "web" too.
+    networks: [data, web]
