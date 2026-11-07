@@ -1,6 +1,6 @@
 # Public API contract (catalog site)
 
-What `shop-site` expects from `GET /api/v1/public/...`. It follows part 2 of `docs/deepseek-prompts.md` (section 8, public API). Items marked **addition** are not in that spec yet and need the backend owner's agreement.
+What `shop-site` expects from `GET /api/v1/public/...`. It follows part 2 of `docs/deepseek-prompts.md` (section 8, public API). Items marked **addition** go beyond that spec; the backend implements all of them (`backend/app/services/public.py`).
 
 Until the backend is ready the site runs on demo data (`MOCK_API=true`), implemented in `shop-site/src/mock/mock-api.js` with exactly these shapes. When the API is live, set `MOCK_API=false` and `API_URL` (for example `http://backend:8000`).
 

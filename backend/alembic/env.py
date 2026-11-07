@@ -18,11 +18,14 @@ if config.config_file_name is not None:
 
 target_metadata = Base.metadata
 
+# Tests pass their own database through config.attributes["database_url"]
+DATABASE_URL: str = config.attributes.get("database_url") or settings.MIGRATIONS_DATABASE_URL
+
 
 def run_migrations_offline() -> None:
     """Generate SQL without connecting (alembic upgrade head --sql)."""
     context.configure(
-        url=settings.MIGRATIONS_DATABASE_URL,
+        url=DATABASE_URL,
         target_metadata=target_metadata,
         literal_binds=True,
         dialect_opts={"paramstyle": "named"},
@@ -39,7 +42,7 @@ def do_run_migrations(connection: Connection) -> None:
 
 async def run_async_migrations() -> None:
     # The URL is passed directly (not through alembic.ini) so "%" in passwords needs no escaping.
-    connectable = create_async_engine(settings.MIGRATIONS_DATABASE_URL, poolclass=pool.NullPool)
+    connectable = create_async_engine(DATABASE_URL, poolclass=pool.NullPool)
     async with connectable.connect() as connection:
         await connection.run_sync(do_run_migrations)
     await connectable.dispose()

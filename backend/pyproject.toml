@@ -51,4 +51,9 @@ include = ["app", "tests", "alembic"]
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+filterwarnings = [
+    # slowapi 0.1.10 on Python 3.14; harmless until a new slowapi release
+    "ignore:'asyncio.iscoroutinefunction' is deprecated:DeprecationWarning:slowapi",
+]
 testpaths = ["tests"]

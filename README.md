@@ -62,7 +62,7 @@ Data lives in the Docker volumes `pgdata` and `media`, so `make down` and `make 
 
 Only the database runs in Docker; the apps run with hot reload.
 
-The backend reads the root `.env` and then `backend/.env`, which overrides it for running on the host: copy `backend/.env.example` to `backend/.env` and put the `APP_USER_PASSWORD` / `APP_OWNER_PASSWORD` values into its URLs (host `localhost` instead of `db`).
+The backend reads the root `.env` and then `backend/.env`, which overrides it for running on the host: copy `backend/.env.example` to `backend/.env` and put the `APP_USER_PASSWORD` / `APP_OWNER_PASSWORD` values into its URLs (host `127.0.0.1` instead of `db`; on Windows `localhost` adds a 2-second delay per connection).
 
 ```bash
 docker compose -f docker-compose.yml -f docker-compose.dev.yml up -d db   # PostgreSQL on 127.0.0.1:5432
