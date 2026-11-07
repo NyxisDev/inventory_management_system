@@ -1,1 +1,160 @@
-// app global css
+body {
+  font-family: Inter, Roboto, sans-serif;
+  font-size: 16px;
+}
+
+body.body--dark {
+  --admin-page: #{$dark-page};
+  --admin-surface: #{$dark};
+  --admin-muted: #{$secondary};
+  --admin-border: #{$admin-dark-border};
+  --admin-alert: #{$warning};
+}
+
+body.body--light {
+  --admin-page: #{$admin-light-page};
+  --admin-surface: white;
+  --admin-muted: #{$admin-light-muted};
+  --admin-border: #{$admin-light-border};
+  --admin-alert: #8a4900;
+  --q-negative: #a92032;
+}
+
+.admin-layout {
+  background: var(--admin-page);
+}
+
+.admin-header,
+.admin-drawer {
+  background: var(--admin-surface);
+  color: inherit;
+}
+
+.admin-toolbar {
+  min-height: $admin-header-height;
+  gap: 8px;
+}
+
+.admin-drawer {
+  .q-item {
+    min-height: $admin-control-height;
+    border-radius: $admin-control-radius;
+    margin-block: 4px;
+  }
+
+  .q-router-link--active,
+  .q-router-link--exact-active {
+    background: rgba(255, 138, 0, 0.12);
+    color: var(--admin-alert);
+    font-weight: 600;
+  }
+}
+
+.admin-page {
+  width: 100%;
+  max-width: $admin-content-width;
+  margin-inline: auto;
+  padding: 28px;
+}
+
+.admin-heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 24px;
+
+  h1 {
+    margin: 0 0 6px;
+    font-family: Outfit, Inter, Roboto, sans-serif;
+    font-size: clamp(1.75rem, 4vw, 2.35rem);
+    font-weight: 700;
+    line-height: 1.13;
+    letter-spacing: -0.02em;
+  }
+
+  p {
+    margin: 0;
+    color: var(--admin-muted);
+  }
+}
+
+.admin-section-title {
+  margin: 0;
+  font-size: 1.125rem;
+  line-height: 1.35;
+  font-weight: 600;
+}
+
+.admin-panel,
+.admin-layout .q-table__container {
+  border: 1px solid var(--admin-border);
+  border-radius: $admin-radius;
+  background: var(--admin-surface);
+}
+
+.admin-muted {
+  color: var(--admin-muted);
+}
+
+.admin-alert {
+  color: var(--admin-alert);
+}
+
+.admin-action {
+  min-height: $admin-control-height;
+  border-radius: $admin-control-radius;
+  font-weight: 600;
+}
+
+.admin-primary:hover {
+  --q-primary: #{$admin-primary-hover};
+}
+
+.admin-form-grid,
+.admin-filter-grid {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
+  align-items: start;
+}
+
+.admin-form-wide {
+  grid-column: 1 / -1;
+}
+
+.admin-layout .q-btn:focus-visible,
+.admin-layout .q-item:focus-visible {
+  outline: 2px solid var(--admin-alert);
+  outline-offset: 2px;
+}
+
+.admin-dialog {
+  width: 520px;
+  max-width: 100%;
+}
+
+.admin-layout .q-table tbody td,
+.admin-layout .q-table thead th {
+  font-size: 0.875rem;
+}
+
+@media (max-width: 599px) {
+  .admin-page {
+    padding: 16px;
+  }
+
+  .admin-heading {
+    margin-bottom: 16px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .admin-layout *,
+  .admin-layout *::before,
+  .admin-layout *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

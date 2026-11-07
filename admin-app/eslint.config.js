@@ -56,6 +56,7 @@ export default [
       'prefer-promise-reject-errors': 'off',
       // slots use the "#" shorthand everywhere, as in the Quasar docs
       'vue/v-slot-style': ['warn', 'shorthand'],
+      'vue/no-v-html': 'error',
 
       // allow debugger during development only
       'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
