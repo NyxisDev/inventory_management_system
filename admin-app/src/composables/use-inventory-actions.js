@@ -1,13 +1,21 @@
+// Runs a (possibly async) store action, shows a success or error notification.
+// Errors: "errors.<key>" is translated; "api:<text>" is the backend's English message.
 import { useQuasar } from 'quasar'
 import { useI18n } from 'vue-i18n'
 
-export function useDemoActions() {
+export function useInventoryActions() {
   const quasar = useQuasar()
   const { t, te } = useI18n()
 
-  function attempt(action, successKey) {
+  function errorMessage(error) {
+    const key = error?.message ?? ''
+    if (key.startsWith('api:')) return key.slice(4)
+    return key.startsWith('errors.') && te(key) ? t(key) : t('errors.generic')
+  }
+
+  async function attempt(action, successKey) {
     try {
-      const result = action()
+      const result = await action()
       if (successKey)
         quasar.notify({
           message: t(successKey),
@@ -17,9 +25,12 @@ export function useDemoActions() {
         })
       return result ?? true
     } catch (error) {
-      const key = error?.message
-      const message = key?.startsWith('errors.') && te(key) ? t(key) : t('errors.generic')
-      quasar.notify({ message, icon: 'error', color: 'negative', textColor: 'dark' })
+      quasar.notify({
+        message: errorMessage(error),
+        icon: 'error',
+        color: 'negative',
+        textColor: 'white',
+      })
       return null
     }
   }
@@ -36,5 +47,5 @@ export function useDemoActions() {
       .onOk(action)
   }
 
-  return { attempt, confirm }
+  return { attempt, confirm, errorMessage }
 }

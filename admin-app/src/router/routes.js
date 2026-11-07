@@ -1,66 +1,68 @@
-const demoRoutes = [
+// meta.requiresAuth: signed-in employees only; meta.requiresAdmin: admins only.
+// The backend checks permissions on every request; these flags only shape the UI.
+const appRoutes = [
   {
-    path: '/demo',
+    path: '/',
     component: () => import('../layouts/DemoLayout.vue'),
+    meta: { requiresAuth: true },
     children: [
-      { path: '', name: 'demo-dashboard', component: () => import('../pages/DashboardPage.vue') },
+      { path: '', name: 'app-dashboard', component: () => import('../pages/DashboardPage.vue') },
       {
         path: 'products',
-        name: 'demo-products',
+        name: 'app-products',
         component: () => import('../pages/ProductsPage.vue'),
       },
       {
         path: 'products/new',
-        name: 'demo-product-new',
+        name: 'app-product-new',
         component: () => import('../pages/ProductFormPage.vue'),
       },
       {
         path: 'products/:id(\\d+)',
-        name: 'demo-product',
+        name: 'app-product',
         component: () => import('../pages/ProductFormPage.vue'),
       },
-      { path: 'stock', name: 'demo-stock', component: () => import('../pages/StockPage.vue') },
+      { path: 'stock', name: 'app-stock', component: () => import('../pages/StockPage.vue') },
       {
         path: 'movements',
-        name: 'demo-movements',
+        name: 'app-movements',
         component: () => import('../pages/MovementsPage.vue'),
       },
       {
         path: 'categories',
-        name: 'demo-categories',
+        name: 'app-categories',
         component: () => import('../pages/DirectoryPage.vue'),
         props: { kind: 'categories' },
       },
       {
         path: 'warehouses',
-        name: 'demo-warehouses',
+        name: 'app-warehouses',
         component: () => import('../pages/DirectoryPage.vue'),
         props: { kind: 'warehouses' },
       },
       {
         path: 'employees',
-        name: 'demo-employees',
+        name: 'app-employees',
         component: () => import('../pages/DirectoryPage.vue'),
         props: { kind: 'employees' },
-        meta: { demoAdmin: true },
+        meta: { requiresAdmin: true },
       },
       {
         path: 'audit',
-        name: 'demo-audit',
+        name: 'app-audit',
         component: () => import('../pages/AuditPage.vue'),
-        meta: { demoAdmin: true },
+        meta: { requiresAdmin: true },
       },
     ],
   },
 ]
 
 export default [
-  { path: '/', redirect: { name: 'login' } },
   {
     path: '/login',
     component: () => import('../layouts/AuthLayout.vue'),
     children: [{ path: '', name: 'login', component: () => import('../pages/LoginPage.vue') }],
   },
-  ...(import.meta.env.DEV ? demoRoutes : []),
+  ...appRoutes,
   { path: '/:catchAll(.*)*', component: () => import('../pages/ErrorNotFound.vue') },
 ]

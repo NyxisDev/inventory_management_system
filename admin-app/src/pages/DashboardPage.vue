@@ -13,7 +13,7 @@
         no-caps
         icon="add"
         :label="$t('dashboard.newReceipt')"
-        :to="{ name: 'demo-stock' }"
+        :to="{ name: 'app-stock' }"
       />
     </div>
 
@@ -35,14 +35,14 @@
           no-caps
           class="admin-action"
           :label="$t('dashboard.allProducts')"
-          :to="{ name: 'demo-products', query: { low: '1' } }"
+          :to="{ name: 'app-products', query: { low: '1' } }"
         />
       </div>
       <q-list class="admin-panel" separator v-if="lowProducts.length">
         <q-item
           v-for="product in lowProducts"
           :key="product.id"
-          :to="{ name: 'demo-product', params: { id: product.id }, query: { tab: 'stock' } }"
+          :to="{ name: 'app-product', params: { id: product.id }, query: { tab: 'stock' } }"
         >
           <q-item-section>
             <q-item-label>{{ product.name }}</q-item-label>
@@ -66,7 +66,7 @@
           no-caps
           class="admin-action"
           :label="$t('dashboard.allMovements')"
-          :to="{ name: 'demo-movements' }"
+          :to="{ name: 'app-movements' }"
         />
       </div>
       <MovementTable :rows="inventory.movements.slice(0, 10)" compact />
@@ -78,9 +78,9 @@
 import { computed } from 'vue'
 import MovementTable from '../components/MovementTable.vue'
 import { formatQuantity } from '../lib/inventory-format.js'
-import { useDemoInventory } from '../stores/demo-inventory.js'
+import { useInventory } from '../stores/inventory.js'
 
-const inventory = useDemoInventory()
+const inventory = useInventory()
 const lowProducts = computed(() =>
   inventory.availableProducts.filter((product) => inventory.isLow(product.id)),
 )

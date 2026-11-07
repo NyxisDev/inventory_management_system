@@ -10,6 +10,6 @@ export default {
     submit: 'Sign in',
     usernameRequired: 'Enter your username',
     passwordRequired: 'Enter your password',
-    previewSuccess: 'Preview: form validation passed'
-  }
+    previewSuccess: 'Preview: form validation passed',
+  },
 }

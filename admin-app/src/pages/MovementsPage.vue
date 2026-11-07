@@ -72,9 +72,9 @@ import { computed, reactive } from 'vue'
 import { useI18n } from 'vue-i18n'
 import MovementTable from '../components/MovementTable.vue'
 import { dateKey, movementTypes } from '../lib/inventory-format.js'
-import { employeeName, useDemoInventory } from '../stores/demo-inventory.js'
+import { employeeName, useInventory } from '../stores/inventory.js'
 
-const inventory = useDemoInventory()
+const inventory = useInventory()
 const { t } = useI18n()
 const filters = reactive({
   product: null,

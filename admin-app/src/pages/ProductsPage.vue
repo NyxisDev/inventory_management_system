@@ -13,7 +13,7 @@
         no-caps
         icon="add"
         :label="$t('products.add')"
-        :to="{ name: 'demo-product-new' }"
+        :to="{ name: 'app-product-new' }"
       />
     </div>
 
@@ -72,7 +72,7 @@
           no-caps
           class="admin-action"
           :label="$t('common.resetFilters')"
-          :to="{ name: 'demo-products' }"
+          :to="{ name: 'app-products' }"
         />
       </div>
     </div>
@@ -175,16 +175,16 @@ import { computed } from 'vue'
 import { useQuasar } from 'quasar'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
-import { useDemoInventory } from '../stores/demo-inventory.js'
-import { useDemoActions } from '../composables/use-demo-actions.js'
+import { useInventory } from '../stores/inventory.js'
+import { useInventoryActions } from '../composables/use-inventory-actions.js'
 import { compareDecimal, formatPrice, formatQuantity, queryValue } from '../lib/inventory-format.js'
 
 const quasar = useQuasar()
 const route = useRoute()
 const router = useRouter()
 const { t } = useI18n()
-const inventory = useDemoInventory()
-const { attempt, confirm } = useDemoActions()
+const inventory = useInventory()
+const { attempt, confirm } = useInventoryActions()
 const statuses = ['all', 'published', 'unpublished', 'archived']
 const sortFields = ['name', 'sku', 'category', 'price', 'total']
 const visibilityOptions = computed(() =>
@@ -281,7 +281,7 @@ function setPagination(value) {
 }
 
 function productLink(id) {
-  return { name: 'demo-product', params: { id } }
+  return { name: 'app-product', params: { id } }
 }
 
 function publish(product, value) {

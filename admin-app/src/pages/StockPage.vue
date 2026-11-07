@@ -11,7 +11,7 @@
         class="admin-action"
         icon="history"
         :label="$t('nav.movements')"
-        :to="{ name: 'demo-movements' }"
+        :to="{ name: 'app-movements' }"
       />
     </div>
     <q-tabs
@@ -121,19 +121,19 @@
 import { computed, reactive, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import { useDemoActions } from '../composables/use-demo-actions.js'
+import { useInventoryActions } from '../composables/use-inventory-actions.js'
 import {
   formatQuantity,
   parseQuantity,
   queryValue,
   stockOperations,
 } from '../lib/inventory-format.js'
-import { useDemoInventory } from '../stores/demo-inventory.js'
+import { useInventory } from '../stores/inventory.js'
 
 const route = useRoute()
 const { t, te } = useI18n()
-const inventory = useDemoInventory()
-const { attempt, confirm } = useDemoActions()
+const inventory = useInventory()
+const { attempt, confirm } = useInventoryActions()
 const draft = reactive({
   operation: 'income',
   product_id: Number(queryValue(route.query.product)) || null,
@@ -189,12 +189,12 @@ function warehouseName(id) {
   return inventory.warehouses.find((item) => item.id === id)?.name
 }
 
-function submit() {
+async function submit() {
   const details = { ...draft }
-  if (!attempt(() => inventory.planStock(details))) return
+  if (!(await attempt(() => inventory.planStock(details)))) return
 
-  const save = () => {
-    if (attempt(() => inventory.recordStock(details), 'stock.recorded')) {
+  const save = async () => {
+    if (await attempt(() => inventory.recordStock(details), 'stock.recorded')) {
       draft.quantity = ''
       draft.comment = ''
     }

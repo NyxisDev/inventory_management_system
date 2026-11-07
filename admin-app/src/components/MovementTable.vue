@@ -23,11 +23,11 @@
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { formatDate, formatQuantity } from '../lib/inventory-format.js'
-import { employeeName, useDemoInventory } from '../stores/demo-inventory.js'
+import { employeeName, useInventory } from '../stores/inventory.js'
 
 defineProps({ rows: { type: Array, required: true }, compact: Boolean })
 const { t } = useI18n()
-const inventory = useDemoInventory()
+const inventory = useInventory()
 const columns = computed(() => [
   {
     name: 'created_at',

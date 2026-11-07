@@ -7,7 +7,9 @@ import {
 } from 'vue-router'
 
 import routes from './routes.js'
-import { useDemoInventory } from '../stores/demo-inventory.js'
+import { Notify } from 'quasar'
+import { useAuthStore } from '../stores/auth.js'
+import { useInventory } from '../stores/inventory.js'
 
 /*
  * If not building with SSR mode, you can
@@ -35,10 +37,23 @@ export default defineRouter(({ store }) => {
     history: createHistory(import.meta.env.QUASAR_VUE_ROUTER_BASE),
   })
 
-  Router.beforeEach((to) => {
-    if (to.meta.demoAdmin && !useDemoInventory(store).isAdmin) {
-      return { name: 'demo-dashboard' }
+  Router.beforeEach(async (to) => {
+    const auth = useAuthStore(store)
+    // First navigation: try to restore the session from the refresh cookie
+    if (!auth.restored) await auth.restore()
+
+    if (to.name === 'login') {
+      return auth.isAuthenticated ? { name: 'app-dashboard' } : true
     }
+    if (to.matched.some((record) => record.meta.requiresAuth) && !auth.isAuthenticated) {
+      return { name: 'login', query: { redirect: to.fullPath } }
+    }
+    if (to.matched.some((record) => record.meta.requiresAdmin) && !auth.isAdmin) {
+      Notify.create({ message: 'This page is available to administrators only.', color: 'warning' })
+      return { name: 'app-dashboard' }
+    }
+    if (auth.isAuthenticated) await useInventory(store).ensureLoaded()
+    return true
   })
 
   return Router

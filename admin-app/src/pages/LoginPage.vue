@@ -4,12 +4,10 @@
       <img :src="budmasterLogo" alt="Budmaster" class="login-logo" />
       <h1 class="text-h5 q-mt-none q-mb-lg">{{ $t('login.title') }}</h1>
 
-      <q-form
-        v-if="isDemoAvailable"
-        class="q-gutter-y-md"
-        @submit="submitPreview"
-        @validation-error="submitted = false"
-      >
+      <p v-if="route.query.reason === 'idle'" class="admin-muted" role="status">
+        {{ $t('login.idle') }}
+      </p>
+      <q-form class="q-gutter-y-md" @submit="submit">
         <q-input
           v-model="username"
           :label="$t('login.username')"
@@ -17,7 +15,7 @@
           autocomplete="username"
           outlined
           lazy-rules
-          @update:model-value="submitted = false"
+          @update:model-value="error = ''"
         />
 
         <div class="password-control" @focusout="hidePasswordOnExit">
@@ -29,7 +27,7 @@
             autocomplete="current-password"
             outlined
             lazy-rules
-            @update:model-value="submitted = false"
+            @update:model-value="error = ''"
           >
             <template #append>
               <q-btn
@@ -51,38 +49,36 @@
           color="primary"
           text-color="dark"
           :label="$t('login.submit')"
+          :loading="loading"
           unelevated
           no-caps
         />
-
-        <p v-if="submitted" class="q-mb-none" role="status">
-          {{ $t('login.previewSuccess') }}
-        </p>
+        <p v-if="error" class="login-error q-mb-none" role="alert">{{ error }}</p>
       </q-form>
-      <p v-else class="admin-muted">{{ $t('login.pending') }}</p>
-      <q-separator v-if="isDemoAvailable" class="q-my-lg" />
-      <q-btn
-        v-if="isDemoAvailable"
-        class="full-width admin-action"
-        :to="{ name: 'demo-dashboard' }"
-        :label="$t('login.openDemo')"
-        icon="dashboard"
-        outline
-        no-caps
-      />
     </q-card>
   </q-page>
 </template>
 
 <script setup>
 import { ref } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import budmasterLogo from '../assets/budmaster-logo-dark.svg'
+import { apiErrorMessage } from '../boot/axios.js'
+import { useAuthStore } from '../stores/auth.js'
+import { useInventory } from '../stores/inventory.js'
 
-const isDemoAvailable = import.meta.env.DEV
+const route = useRoute()
+const router = useRouter()
+const { t } = useI18n()
+const auth = useAuthStore()
+const inventory = useInventory()
+
 const username = ref('')
 const password = ref('')
 const isPasswordVisible = ref(false)
-const submitted = ref(false)
+const loading = ref(false)
+const error = ref('')
 
 function hidePasswordOnExit(event) {
   if (!event.currentTarget.contains(event.relatedTarget)) {
@@ -90,10 +86,22 @@ function hidePasswordOnExit(event) {
   }
 }
 
-function submitPreview() {
+async function submit() {
   isPasswordVisible.value = false
-  password.value = ''
-  submitted.value = true
+  loading.value = true
+  error.value = ''
+  try {
+    await auth.login(username.value.trim(), password.value)
+    inventory.reset()
+    const redirect = String(route.query.redirect || '')
+    // Only internal paths, never an external URL
+    router.replace(redirect.startsWith('/') && !redirect.startsWith('//') ? redirect : '/')
+  } catch (err) {
+    error.value = apiErrorMessage(err) || t('errors.generic')
+  } finally {
+    password.value = ''
+    loading.value = false
+  }
 }
 </script>
 
@@ -119,6 +127,10 @@ function submitPreview() {
 
 .password-control :deep(input::-ms-reveal) {
   display: none;
+}
+
+.login-error {
+  color: var(--q-negative);
 }
 
 .login-submit {

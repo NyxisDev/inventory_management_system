@@ -99,13 +99,13 @@
 import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { exportFile } from 'quasar'
-import { useDemoActions } from '../composables/use-demo-actions.js'
+import { useInventoryActions } from '../composables/use-inventory-actions.js'
 import { formatDate } from '../lib/inventory-format.js'
-import { employeeName, useDemoInventory } from '../stores/demo-inventory.js'
+import { employeeName, useInventory } from '../stores/inventory.js'
 
 const { t } = useI18n()
-const { attempt } = useDemoActions()
-const inventory = useDemoInventory()
+const { attempt } = useInventoryActions()
+const inventory = useInventory()
 const search = ref('')
 const employeeId = ref(null)
 const action = ref(null)
@@ -185,7 +185,7 @@ function download() {
     ),
   ]
   const result = exportFile(
-    'budmaster-demo-audit.csv',
+    'budmaster-audit.csv',
     '\uFEFF' + table.map((row) => row.map(csvCell).join(';')).join('\r\n'),
     'text/csv;charset=utf-8;',
   )

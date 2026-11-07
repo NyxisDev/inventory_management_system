@@ -94,7 +94,35 @@
                 outlined
                 :label="$t('directory.role')"
               />
-              <p class="admin-muted q-mb-none">{{ $t('directory.demoPasswords') }}</p>
+              <q-input
+                v-model="draft.password"
+                outlined
+                :type="showPassword ? 'text' : 'password'"
+                autocomplete="new-password"
+                maxlength="72"
+                :label="$t(draft.id ? 'directory.newPassword' : 'login.password')"
+                :hint="$t('directory.passwordHint')"
+                :rules="[passwordRule]"
+              >
+                <template #append>
+                  <q-btn
+                    flat
+                    round
+                    dense
+                    :icon="showPassword ? 'visibility_off' : 'visibility'"
+                    :aria-label="$t(showPassword ? 'login.hidePassword' : 'login.showPassword')"
+                    @click="showPassword = !showPassword"
+                  />
+                  <q-btn
+                    flat
+                    round
+                    dense
+                    icon="autorenew"
+                    :aria-label="$t('directory.generatePassword')"
+                    @click="generatePassword"
+                  />
+                </template>
+              </q-input>
             </template>
             <q-input
               v-else
@@ -167,13 +195,13 @@
 <script setup>
 import { computed, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useDemoActions } from '../composables/use-demo-actions.js'
-import { employeeName, useDemoInventory } from '../stores/demo-inventory.js'
+import { useInventoryActions } from '../composables/use-inventory-actions.js'
+import { employeeName, useInventory } from '../stores/inventory.js'
 
 const props = defineProps({ kind: { type: String, required: true } })
-const inventory = useDemoInventory()
+const inventory = useInventory()
 const { t } = useI18n()
-const { attempt, confirm } = useDemoActions()
+const { attempt, confirm } = useInventoryActions()
 const editable = computed(() => props.kind === 'categories' || inventory.isAdmin)
 const dialog = ref(false)
 const draft = ref({})
@@ -252,15 +280,40 @@ watch(
   },
 )
 const required = (value) => Boolean(String(value ?? '').trim()) || t('common.required')
+const showPassword = ref(false)
+// Same policy as the backend: 10+ characters, at least one letter and one digit
+function passwordRule(value) {
+  const text = String(value ?? '')
+  if (!text) return Boolean(draft.value.id) || t('common.required')
+  return (
+    (text.length >= 10 && /\p{L}/u.test(text) && /\d/.test(text)) || t('directory.passwordHint')
+  )
+}
+function generatePassword() {
+  const alphabet = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789'
+  const bytes = crypto.getRandomValues(new Uint32Array(16))
+  let value = Array.from(bytes, (n) => alphabet[n % alphabet.length]).join('')
+  value = value.slice(0, 14) + 'a7'
+  draft.value.password = value
+  showPassword.value = true
+}
 const wholeNumber = (value) => /^\d+$/.test(String(value)) || t('errors.order')
 
 function editRecord(record) {
   const defaults = {
     categories: { name: '', parent_id: null, sort_order: 0 },
     warehouses: { name: '', address: '', show_on_site: false, is_active: true },
-    employees: { first_name: '', last_name: '', username: '', role: 'staff', is_active: true },
+    employees: {
+      first_name: '',
+      last_name: '',
+      username: '',
+      password: '',
+      role: 'staff',
+      is_active: true,
+    },
   }
-  draft.value = { ...(record || defaults[props.kind]) }
+  draft.value = { ...(record || defaults[props.kind]), password: '' }
+  showPassword.value = false
   previousActive.value = record?.is_active === true
   dialog.value = true
 }
@@ -272,8 +325,8 @@ function save() {
     warehouses: inventory.saveWarehouse,
     employees: inventory.saveEmployee,
   }
-  const execute = () => {
-    if (attempt(() => actions[props.kind](record), 'common.saved')) dialog.value = false
+  const execute = async () => {
+    if (await attempt(() => actions[props.kind](record), 'common.saved')) dialog.value = false
   }
   if (previousActive.value && !record.is_active) {
     confirm(t('directory.deactivate', { name: record.name || employeeName(record) }), execute)
