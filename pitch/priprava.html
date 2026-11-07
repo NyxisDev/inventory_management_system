@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="sk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BuildStock príprava</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --page: #0b1121;
+    --panel: #151d30;
+    --text: #ffffff;
+    --muted: #94a3b8;
+    --border: rgba(255, 255, 255, 0.1);
+    --orange: #ff8a00;
+    --orange-hover: #e57a00;
+    --red: #f87171;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--page);
+    color: var(--text);
+    font-family: Inter, system-ui, sans-serif;
+    font-size: 18px;
+    line-height: 1.55;
+  }
+  .wrap { max-width: 720px; margin: 0 auto; padding: 24px 16px 64px; }
+  h1, h2 { font-family: Outfit, Inter, sans-serif; font-weight: 700; line-height: 1.15; margin: 0; }
+  h1 { font-size: 34px; }
+  .meta { color: var(--muted); margin: 6px 0 20px; }
+
+  .timer {
+    position: sticky; top: 0; z-index: 2;
+    background: var(--page);
+    border-bottom: 1px solid var(--border);
+    padding: 12px 0;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .time {
+    font-family: Outfit, sans-serif; font-size: 52px; font-variant-numeric: tabular-nums;
+    min-width: 3.2ch; transition: color 0.3s ease-in-out;
+  }
+  .time.over { color: var(--red); }
+  button {
+    font: 600 16px Inter, sans-serif;
+    border-radius: 8px; padding: 12px 18px; min-height: 44px; cursor: pointer;
+    border: 1px solid var(--border); background: var(--panel); color: var(--text);
+  }
+  button.primary { background: var(--orange); border-color: var(--orange); color: #0b1121; box-shadow: 0 0 18px rgba(255, 138, 0, 0.35); }
+  button.primary:hover { background: var(--orange-hover); }
+  button:focus-visible { outline: 3px solid #2563eb; outline-offset: 2px; }
+
+  .slide {
+    background: var(--panel); border: 1px solid var(--border); border-radius: 16px;
+    padding: 20px; margin-top: 20px;
+  }
+  .slide header { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+  .slide h2 { font-size: 22px; }
+  .dur { color: var(--orange); font-weight: 600; white-space: nowrap; }
+  .onslide { color: var(--muted); font-size: 14px; margin: 8px 0 12px; }
+  .say { font-size: 22px; line-height: 1.5; margin: 0; }
+  mark {
+    background: rgba(255, 138, 0, 0.18); color: var(--text);
+    border-bottom: 2px solid var(--orange); padding: 0 2px;
+  }
+  .tag {
+    display: inline-block; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em;
+    color: #0b1121; background: var(--orange); border-radius: 6px; padding: 1px 6px; margin-left: 4px; vertical-align: 2px;
+  }
+  details { margin-top: 12px; color: var(--muted); font-size: 15px; }
+  summary { cursor: pointer; min-height: 32px; }
+
+  section.notes { margin-top: 36px; }
+  section.notes h2 { font-size: 24px; margin-bottom: 12px; }
+  ul.changes { padding-left: 20px; margin: 0; }
+  ul.changes li { margin-bottom: 10px; }
+  .check label {
+    display: flex; gap: 12px; align-items: flex-start; padding: 10px 0;
+    border-bottom: 1px solid var(--border); cursor: pointer;
+  }
+  .check input { width: 22px; height: 22px; margin-top: 3px; accent-color: var(--orange); flex: none; }
+  .check input:checked + span { color: var(--muted); text-decoration: line-through; }
+  @media (prefers-reduced-motion: reduce) { .time { transition: none; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>BuildStock: príprava</h1>
+  <p class="meta">Spolu ~107 hovorených slov ≈ 48 sekúnd</p>
+
+  <div class="timer">
+    <span class="time" id="time" aria-live="off">0,0</span>
+    <button class="primary" id="toggle">Štart</button>
+    <button id="reset">Reset</button>
+  </div>
+
+  <article class="slide">
+    <header><h2>1 · Problém</h2><span class="dur">~15 s</span></header>
+    <p class="onslide">Na slide: Je to na sklade? Web to nepovie. Zavolajte nám. + výrez pôvodného webu (kontakty)</p>
+    <p class="say"><mark>Predajňa stavebnín v Čuhujive mala web s adresou a tromi telefónmi.</mark><span class="tag">naspamäť</span> Či je tovar na sklade, sa z neho nedozviete. Tak zákazník volá a predavač ide pozrieť do skladu.</p>
+    <details><summary>Po rusky (len pre teba)</summary>У магазина стройматериалов в Чугуеве был сайт с адресом и тремя телефонами. Есть ли товар на складе, из него не узнать. Поэтому покупатель звонит, а продавец идёт смотреть на склад.</details>
+  </article>
+
+  <article class="slide">
+    <header><h2>2 · Dôkaz</h2><span class="dur">~30 s</span></header>
+    <p class="onslide">Na slide: BuildStock · Presné zásoby v každom sklade, online. + screenshot stránky produktu</p>
+    <p class="say">Preto sme spravili BuildStock: sklad a katalóg v jednom. Skladník zapíše príjem, výdaj alebo presun medzi skladmi pár ťuknutiami na mobile. Hneď to vidí zákazník v katalógu: cenu a presný počet kusov v každom sklade. Bez telefonovania. A každá zmena sa zapíše do záznamu: kto, čo a kedy zmenil.</p>
+    <details><summary>Po rusky (len pre teba)</summary>Поэтому мы сделали BuildStock: склад и каталог в одном. Кладовщик записывает приход, расход или перемещение между складами в пару касаний на телефоне. Покупатель сразу видит это в каталоге: цену и точное количество на каждом складе. Без звонков. И каждое изменение записывается в журнал: кто, что и когда изменил.</details>
+  </article>
+
+  <article class="slide">
+    <header><h2>3 · Kde to žije</h2><span class="dur">~15 s</span></header>
+    <p class="onslide">Na slide: Menšie predajne stavebnín · namiesto telefonátov · ďalej: spustiť naostro v Čuhujive</p>
+    <p class="say">Je to pre menšie predajne stavebnín, ktoré dnes stav tovaru riešia telefonátmi. Ďalší krok je spustiť to naostro v predajni v Čuhujive. <mark>Zákazník už nemusí volať, stačí sa pozrieť.</mark><span class="tag">naspamäť</span></p>
+    <details><summary>Po rusky (len pre teba)</summary>Это для небольших магазинов стройматериалов, которые сегодня решают вопрос наличия звонками. Следующий шаг: запустить по-настоящему в магазине в Чугуеве. Покупателю больше не нужно звонить, достаточно посмотреть.</details>
+  </article>
+
+  <section class="notes">
+    <h2>Čo som zmenil a prečo</h2>
+    <ul class="changes">
+      <li><strong>Pôvodný web predajne</strong> → je na slide 1 ako dôkaz bolesti: adresa a tri telefóny, ale ani slovo o tom, čo je na sklade. Konkrétna predajňa funguje lepšie ako „predajne všeobecne“.</li>
+      <li><strong>„customer sees accurate price and availability without calling“</strong> (PRODUCT.md) → z toho je posledná veta: telefonát je bolesť, ktorú si každý vie predstaviť.</li>
+      <li><strong>Admin, roly, audit log, sklady, CSV export</strong> → na slide 2 je len jeden tok: zápis v sklade → zákazník vidí stav. Audit je jedna veta, žiadna prehliadka funkcií.</li>
+      <li><strong>FastAPI, Vue, Quasar, PostgreSQL, Docker</strong> → vynechané: publikum zaujíma, čo to robí a pre koho, nie z čoho je to postavené.</li>
+      <li><strong>„menšie predajne“ a „spustiť naostro v Čuhujive“</strong> → toto je odhad. Ak je ďalší krok iný, prepíš ho.</li>
+    </ul>
+  </section>
+
+  <section class="notes check">
+    <h2>Pred prezentáciou</h2>
+    <label><input type="checkbox" data-k="c1"><span>Otvor si slidy a prejdi všetky tri.</span></label>
+    <label><input type="checkbox" data-k="c2"><span>Otvor si túto prípravu na mobile a prečítaj si text nahlas so stopkami, dvakrát. Máš viac ako 55 sekúnd? Škrtaj zo slidu 2, nie z problému.</span></label>
+    <label><input type="checkbox" data-k="c3"><span>Prvú a poslednú vetu vieš naspamäť.</span></label>
+    <label><input type="checkbox" data-k="c4"><span>Na slide 2 je skutočný screenshot alebo záznam, nie prázdne miesto.</span></label>
+    <label><input type="checkbox" data-k="c5"><span>Ak je na slide 3 QR kód, naskenuj ho mobilom a over, že vedie na funkčnú stránku.</span></label>
+    <label><input type="checkbox" data-k="c6"><span>Ak neprezentuješ z vlastného notebooku, živé demo nerob, ukáž záznam.</span></label>
+  </section>
+</div>
+<script>
+  const timeEl = document.getElementById('time');
+  const toggle = document.getElementById('toggle');
+  let start = 0, elapsed = 0, raf = 0;
+  function render() {
+    const ms = elapsed + (start ? performance.now() - start : 0);
+    const s = ms / 1000;
+    timeEl.textContent = s.toFixed(1).replace('.', ',');
+    timeEl.classList.toggle('over', s >= 55);
+    if (start) raf = requestAnimationFrame(render);
+  }
+  toggle.addEventListener('click', () => {
+    if (start) { elapsed += performance.now() - start; start = 0; cancelAnimationFrame(raf); toggle.textContent = 'Štart'; render(); }
+    else { start = performance.now(); toggle.textContent = 'Stop'; render(); }
+  });
+  document.getElementById('reset').addEventListener('click', () => {
+    start = 0; elapsed = 0; cancelAnimationFrame(raf); toggle.textContent = 'Štart'; render();
+  });
+  document.querySelectorAll('.check input').forEach((box) => {
+    try { box.checked = localStorage.getItem('pitch-' + box.dataset.k) === '1'; } catch (e) { /* storage unavailable */ }
+    box.addEventListener('change', () => {
+      try { localStorage.setItem('pitch-' + box.dataset.k, box.checked ? '1' : '0'); } catch (e) { /* storage unavailable */ }
+    });
+  });
+</script>
+</body>
+</html>

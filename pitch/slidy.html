@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="sk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BuildStock pitch</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --page: #0b1121;
+    --panel: #151d30;
+    --text: #ffffff;
+    --muted: #94a3b8;
+    --border: rgba(255, 255, 255, 0.1);
+    --orange: #ff8a00;
+    --green: #22c55e;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; background: #000; overflow: hidden; }
+  body {
+    font-family: Inter, system-ui, sans-serif;
+    color: var(--text);
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    user-select: none;
+  }
+  .deck {
+    position: relative;
+    width: min(100vw, calc(100vh * 16 / 9));
+    aspect-ratio: 16 / 9;
+    background: var(--page);
+    overflow: hidden;
+    font-size: min(1.6vw, 2.85vh);
+  }
+  .slide {
+    position: absolute;
+    inset: 0;
+    padding: 6% 7%;
+    display: flex;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease-in-out;
+  }
+  .slide.active { opacity: 1; visibility: visible; }
+  @media (prefers-reduced-motion: reduce) { .slide { transition: none; } }
+
+  h1, h2 { font-family: Outfit, Inter, sans-serif; font-weight: 700; line-height: 1.05; letter-spacing: -0.01em; }
+  .accent { color: var(--orange); }
+  .muted { color: var(--muted); }
+
+  /* Slide 1: problem */
+  .s1 { align-items: center; gap: 5%; }
+  .s1-copy { flex: 0 0 42%; display: flex; flex-direction: column; gap: 2em; }
+  .s1 h1 { font-size: 4.2em; }
+  .old { flex: 1; margin: 0; }
+  .old img {
+    display: block; width: 100%; height: auto;
+    border: 1px solid var(--border); border-radius: 1em;
+    filter: grayscale(0.35);
+  }
+  .old figcaption { margin-top: 0.8em; color: var(--muted); font-size: 1.2em; text-align: center; }
+  .s1 .scene { display: flex; gap: 1.2em; align-items: center; }
+  .bubble {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 1em;
+    padding: 0.8em 1.2em;
+    font-size: 1.5em;
+    font-weight: 500;
+  }
+  .bubble.q { border-color: var(--orange); }
+  .phone {
+    width: 3.2em; height: 3.2em; border-radius: 50%;
+    display: grid; place-items: center;
+    background: var(--orange);
+    box-shadow: 0 0 2em rgba(255, 138, 0, 0.45);
+    flex: none;
+  }
+  .phone svg { width: 1.6em; height: 1.6em; fill: #0b1121; }
+
+  /* Slide 2: proof */
+  .s2 { gap: 5%; align-items: center; }
+  .s2 .copy { flex: 0 0 34%; display: flex; flex-direction: column; gap: 1em; }
+  .s2 .logo { display: flex; align-items: center; gap: 0.5em; font-family: Outfit, sans-serif; font-weight: 700; font-size: 2.2em; }
+  .s2 .logo i {
+    width: 1.3em; height: 1.3em; border-radius: 0.3em; background: var(--orange);
+    display: grid; place-items: center; font-style: normal;
+  }
+  .s2 .logo svg { width: 0.8em; height: 0.8em; fill: #0b1121; }
+  .s2 h2 { font-size: 3.4em; }
+  .s2 .shot {
+    flex: 1;
+    border: 1px solid var(--border);
+    border-radius: 1em;
+    overflow: hidden;
+    box-shadow: 0 0 4em rgba(255, 138, 0, 0.15);
+  }
+  .s2 .shot img { display: block; width: 100%; height: auto; }
+
+  /* Slide 3: where it lives */
+  .s3 { flex-direction: column; justify-content: center; gap: 1.6em; }
+  .s3 .row { display: flex; align-items: baseline; gap: 1em; }
+  .s3 .label { flex: 0 0 9em; font-size: 1.3em; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
+  .s3 .value { font-family: Outfit, sans-serif; font-weight: 700; font-size: 3.4em; line-height: 1.1; }
+  .s3 .row + .row { border-top: 1px solid var(--border); padding-top: 0.6em; }
+
+  .counter {
+    position: absolute; right: 2.5%; bottom: 3.5%;
+    font-size: 1em; color: var(--muted); font-variant-numeric: tabular-nums;
+  }
+</style>
+</head>
+<body>
+<main class="deck" aria-live="polite">
+
+  <section class="slide s1 active" aria-label="Slide 1: Problém">
+    <div class="s1-copy">
+      <h1>Je to <span class="accent">na sklade?</span><br>Web to nepovie.</h1>
+      <div class="scene" aria-hidden="true">
+        <div class="phone"><svg viewBox="0 0 24 24"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/></svg></div>
+        <div class="bubble q">Zavolajte nám.</div>
+      </div>
+    </div>
+    <figure class="old">
+      <img src="stary-web-kontakty.png" alt="Pôvodný web predajne: adresa a tri telefónne čísla, žiadne zásoby">
+      <figcaption>Pôvodný web predajne</figcaption>
+    </figure>
+  </section>
+
+  <section class="slide s2" aria-label="Slide 2: Dôkaz">
+    <div class="copy">
+      <div class="logo"><i><svg viewBox="0 0 24 24"><path d="M12 3 2 11h3v9h5v-6h4v6h5v-9h3z"/></svg></i>BuildStock</div>
+      <h2>Presné zásoby v&nbsp;<span class="accent">každom sklade</span>, online.</h2>
+    </div>
+    <div class="shot"><img src="product.png" alt="Stránka produktu: cena a počet kusov v každom sklade"></div>
+  </section>
+
+  <section class="slide s3" aria-label="Slide 3: Kde to žije">
+    <div class="row"><span class="label">Pre koho</span><span class="value">Menšie predajne stavebnín</span></div>
+    <div class="row"><span class="label">Namiesto</span><span class="value">telefonátov</span></div>
+    <div class="row"><span class="label">Ďalej</span><span class="value accent">spustiť naostro v&nbsp;Čuhujive</span></div>
+  </section>
+
+  <div class="counter" id="counter">1/3</div>
+</main>
+<script>
+  const slides = [...document.querySelectorAll('.slide')];
+  const counter = document.getElementById('counter');
+  let i = 0;
+  function show(n) {
+    i = Math.max(0, Math.min(slides.length - 1, n));
+    slides.forEach((s, k) => s.classList.toggle('active', k === i));
+    counter.textContent = (i + 1) + '/' + slides.length;
+  }
+  show((parseInt(location.hash.slice(1), 10) || 1) - 1);
+  document.addEventListener('keydown', (e) => {
+    if (['ArrowRight', 'ArrowDown', 'PageDown', ' ', 'Enter'].includes(e.key)) { e.preventDefault(); show(i + 1); }
+    if (['ArrowLeft', 'ArrowUp', 'PageUp', 'Backspace'].includes(e.key)) { e.preventDefault(); show(i - 1); }
+    if (e.key === 'Home') show(0);
+    if (e.key === 'End') show(slides.length - 1);
+    if (e.key === 'f') document.documentElement.requestFullscreen?.();
+  });
+  document.addEventListener('click', (e) => {
+    show(e.clientX < window.innerWidth / 4 ? i - 1 : i + 1);
+  });
+</script>
+</body>
+</html>
