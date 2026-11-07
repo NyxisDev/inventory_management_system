@@ -62,9 +62,15 @@ Data lives in the Docker volumes `pgdata` and `media`, so `make down` and `make 
 
 Only the database runs in Docker; the apps run with hot reload.
 
+The backend reads the root `.env` and then `backend/.env`, which overrides it for running on the host: copy `backend/.env.example` to `backend/.env` and put the `APP_USER_PASSWORD` / `APP_OWNER_PASSWORD` values into its URLs (host `localhost` instead of `db`).
+
 ```bash
 docker compose -f docker-compose.yml -f docker-compose.dev.yml up -d db   # PostgreSQL on 127.0.0.1:5432
-cd backend && uvicorn app.main:app --reload  # http://localhost:8000 (DATABASE_URL with localhost instead of db)
+cd backend
+python -m venv .venv && .venv/Scripts/pip install -r requirements.txt -r requirements-dev.txt   # Linux/macOS: .venv/bin/
+.venv/Scripts/alembic upgrade head           # migrations, as app_owner
+.venv/Scripts/python -m app.seed             # first admin, warehouse, 2 categories (safe to repeat)
+uvicorn app.main:app --reload                # http://localhost:8000
 cd admin-app && npm run dev                  # proxies /api to :8000
 cd shop-site && API_URL=http://localhost:8000 MOCK_API=false npm run dev
 ```
