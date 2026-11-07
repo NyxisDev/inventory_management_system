@@ -35,3 +35,47 @@ jobs:
 
       - name: Run checks
         run: bash scripts/check.sh
+
+  backend-tests:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      # Throw-away credentials of the CI database container, not used anywhere else
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      APP_OWNER_PASSWORD: ci_owner_password
+      APP_USER_PASSWORD: ci_user_password
+      MIGRATIONS_DATABASE_URL: postgresql+asyncpg://app_owner:ci_owner_password@127.0.0.1:5432/inventory
+      DATABASE_URL: postgresql+asyncpg://app_user:ci_user_password@127.0.0.1:5432/inventory
+      COOKIE_SECURE: "true"
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install backend dependencies
+        run: pip install -r backend/requirements.txt -r backend/requirements-dev.txt
+
+      - name: Create database roles (backend/db/init_roles.sql)
+        env:
+          PGPASSWORD: postgres
+        run: psql -h 127.0.0.1 -U postgres -v ON_ERROR_STOP=1 -f backend/db/init_roles.sql
+
+      - name: Run tests
+        working-directory: backend
+        run: |
+          export JWT_SECRET="$(openssl rand -hex 32)"
+          python -m pytest -q
