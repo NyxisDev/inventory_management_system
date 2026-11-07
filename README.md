@@ -28,3 +28,5 @@ Passwords are stored as hashes. Access tokens are short-lived JWTs, and refresh 
 ## Status
 
 Early development. See [ROADMAP.md](ROADMAP.md).
+
+The code is generated step by step from the prompts in [docs/deepseek-prompts.md](docs/deepseek-prompts.md) (in Russian).
