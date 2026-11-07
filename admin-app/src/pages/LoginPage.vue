@@ -5,6 +5,7 @@
       <h1 class="text-h5 q-mt-none q-mb-lg">{{ $t('login.title') }}</h1>
 
       <q-form
+        v-if="isDemoAvailable"
         class="q-gutter-y-md"
         @submit="submitPreview"
         @validation-error="submitted = false"
@@ -58,6 +59,17 @@
           {{ $t('login.previewSuccess') }}
         </p>
       </q-form>
+      <p v-else class="admin-muted">{{ $t('login.pending') }}</p>
+      <q-separator v-if="isDemoAvailable" class="q-my-lg" />
+      <q-btn
+        v-if="isDemoAvailable"
+        class="full-width admin-action"
+        :to="{ name: 'demo-dashboard' }"
+        :label="$t('login.openDemo')"
+        icon="dashboard"
+        outline
+        no-caps
+      />
     </q-card>
   </q-page>
 </template>
@@ -66,6 +78,7 @@
 import { ref } from 'vue'
 import budmasterLogo from '../assets/budmaster-logo-dark.svg'
 
+const isDemoAvailable = import.meta.env.DEV
 const username = ref('')
 const password = ref('')
 const isPasswordVisible = ref(false)
@@ -79,17 +92,16 @@ function hidePasswordOnExit(event) {
 
 function submitPreview() {
   isPasswordVisible.value = false
+  password.value = ''
   submitted.value = true
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .login-card {
-  --q-primary: #ff8a00;
-
   width: 100%;
   max-width: 400px;
-  border-radius: 16px;
+  border-radius: $admin-radius;
 }
 
 .login-logo {
@@ -101,8 +113,8 @@ function submitPreview() {
 }
 
 .password-toggle {
-  min-width: 44px;
-  min-height: 44px;
+  min-width: $admin-control-height;
+  min-height: $admin-control-height;
 }
 
 .password-control :deep(input::-ms-reveal) {
@@ -110,8 +122,8 @@ function submitPreview() {
 }
 
 .login-submit {
-  min-height: 44px;
-  border-radius: 8px;
+  min-height: $admin-control-height;
+  border-radius: $admin-control-radius;
   font-size: 1rem;
   font-weight: 600;
 }

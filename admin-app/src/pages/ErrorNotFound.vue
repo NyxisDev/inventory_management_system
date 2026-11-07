@@ -1,19 +1,17 @@
 <template>
-  <div class="fullscreen bg-blue text-white text-center q-pa-md flex flex-center">
+  <main class="fullscreen flex flex-center q-pa-lg text-center">
     <div>
-      <div style="font-size: 30vh">404</div>
-
-      <div class="text-h2" style="opacity: 0.4">Oops. Nothing here...</div>
-
+      <p class="text-h3 q-mb-sm">404</p>
+      <h1 class="text-h5 q-mt-none">{{ $t('common.notFound') }}</h1>
       <q-btn
-        class="q-mt-xl"
-        color="white"
-        text-color="blue"
+        class="admin-action"
+        :to="{ name: 'login' }"
+        :label="$t('common.goBack')"
+        color="primary"
+        text-color="dark"
         unelevated
-        to="/"
-        label="Go Home"
         no-caps
       />
     </div>
-  </div>
+  </main>
 </template>

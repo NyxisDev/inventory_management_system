@@ -7,6 +7,7 @@ import {
 } from 'vue-router'
 
 import routes from './routes.js'
+import { useDemoInventory } from '../stores/demo-inventory.js'
 
 /*
  * If not building with SSR mode, you can
@@ -17,7 +18,7 @@ import routes from './routes.js'
  * with the Router instance.
  */
 
-export default defineRouter((/* { store, ssrContext } */) => {
+export default defineRouter(({ store }) => {
   const createHistory = import.meta.env.QUASAR_SERVER
     ? createMemoryHistory
     : import.meta.env.QUASAR_VUE_ROUTER_MODE === 'history'
@@ -32,6 +33,12 @@ export default defineRouter((/* { store, ssrContext } */) => {
     // quasar.conf.js -> build -> vueRouterMode
     // quasar.conf.js -> build -> publicPath
     history: createHistory(import.meta.env.QUASAR_VUE_ROUTER_BASE),
+  })
+
+  Router.beforeEach((to) => {
+    if (to.meta.demoAdmin && !useDemoInventory(store).isAdmin) {
+      return { name: 'demo-dashboard' }
+    }
   })
 
   return Router

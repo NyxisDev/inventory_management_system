@@ -1,38 +1,26 @@
-# Budmaster Admin (budmaster-admin-preview)
+# Budmaster Admin
 
-## Install the dependencies
+Quasar SPA for the employee inventory workspace.
 
-```bash
-pnpm install
-# or: yarn/npm/bun install
+## Local demo
+
+From `admin-app/`, install the locked dependencies and start Quasar:
+
+```sh
+npm ci
+npm run dev
 ```
 
-### Start the app in development mode (HMR, error reporting, etc.)
+Open the local address printed by Quasar and select **Open demo workspace**.
 
-```bash
-quasar dev
+1. Go to **Stock operations → Receipt**, select a product and warehouse, then record a quantity.
+2. Check the new balance in **Products** and the record in **Movement history**.
+3. Switch **Preview role** to **Staff** in the navigation drawer. **Employees** and **Audit log** are administrator-only in the preview.
+
+The demo uses sample records in memory. Reloading restores the sample data. The demo route is available in development mode. Connecting FastAPI, authenticating staff, uploading product photos and sharing live stock with the catalog are integration steps.
+
+## Build
+
+```sh
+npm run build
 ```
-
-### Format & Lint the files
-
-```bash
-pnpm run lint
-# or: yarn/npm/bun run lint
-```
-
-...or just check formatting & linting:
-
-```bash
-pnpm run lint:check
-# or: yarn/npm/bun run lint:check
-```
-
-### Build the app for production
-
-```bash
-quasar build
-```
-
-### Customize the configuration
-
-See [Configuring quasar.config.js](https://v2.quasar.dev/quasar-cli-vite/quasar-config-file).
