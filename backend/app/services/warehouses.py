@@ -6,7 +6,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models import AuditAction, Employee, Warehouse
 from app.schemas.warehouse import WarehouseCreate, WarehouseUpdate
-from app.services.audit import log_action
+from app.services.audit import WAREHOUSE_FIELDS, log_action, snapshot
 from app.services.errors import ConflictError, NotFoundError
 
 
@@ -50,6 +50,8 @@ async def create_warehouse(
         action=AuditAction.create,
         entity_type="warehouse",
         entity_id=warehouse.id,
+        new_data=snapshot(warehouse, WAREHOUSE_FIELDS),
+        label=warehouse.name,
         request=request,
     )
     await session.commit()
@@ -64,6 +66,7 @@ async def update_warehouse(
     request: Request,
 ) -> Warehouse:
     warehouse = await get_warehouse(session, warehouse_id)
+    before = snapshot(warehouse, WAREHOUSE_FIELDS)
     fields = data.model_fields_set
     if data.name is not None and data.name != warehouse.name:
         await _ensure_name_free(session, data.name, warehouse.id)
@@ -81,6 +84,9 @@ async def update_warehouse(
         action=AuditAction.update,
         entity_type="warehouse",
         entity_id=warehouse.id,
+        old_data=before,
+        new_data=snapshot(warehouse, WAREHOUSE_FIELDS),
+        label=warehouse.name,
         request=request,
     )
     await session.commit()

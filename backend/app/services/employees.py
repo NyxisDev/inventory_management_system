@@ -9,7 +9,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.core.security import hash_password
 from app.models import AuditAction, Employee, EmployeeRole
 from app.schemas.employee import EmployeeCreate, EmployeeUpdate, PasswordReset
-from app.services.audit import log_action
+from app.services.audit import EMPLOYEE_FIELDS, log_action, snapshot
 from app.services.auth import revoke_all_refresh_tokens
 from app.services.errors import ConflictError, NotFoundError
 from app.services.query import escape_like, paginate
@@ -70,6 +70,8 @@ async def create_employee(
         action=AuditAction.create,
         entity_type="employee",
         entity_id=employee.id,
+        new_data=snapshot(employee, EMPLOYEE_FIELDS),
+        label=employee.full_name,
         request=request,
     )
     await session.commit()
@@ -100,6 +102,7 @@ async def update_employee(
     request: Request,
 ) -> Employee:
     employee = await get_employee(session, employee_id)
+    before = snapshot(employee, EMPLOYEE_FIELDS)
     changes = data.model_dump(exclude_unset=True)
     # Explicit null for non-nullable fields means "no change"
     changes = {key: value for key, value in changes.items() if value is not None}
@@ -126,6 +129,9 @@ async def update_employee(
         action=AuditAction.update,
         entity_type="employee",
         entity_id=employee.id,
+        old_data=before,
+        new_data=snapshot(employee, EMPLOYEE_FIELDS),
+        label=employee.full_name,
         request=request,
     )
     await session.commit()
@@ -151,8 +157,8 @@ async def reset_password(
         action=AuditAction.update,
         entity_type="employee",
         entity_id=employee.id,
-        old_data={"password": "***"},
         new_data={"password": "***"},
+        label=employee.full_name,
         request=request,
     )
     await session.commit()

@@ -225,8 +225,8 @@ async def change_password(
         action=AuditAction.update,
         entity_type="employee",
         entity_id=employee.id,
-        old_data={"password": "***"},
         new_data={"password": "***"},
+        label=employee.full_name,
         request=request,
     )
     await session.commit()

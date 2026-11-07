@@ -110,6 +110,7 @@ async def _apply(
     actor: Employee,
     comment: str | None,
     request: Request,
+    label: str,
     transfer_group: uuid.UUID | None = None,
 ) -> StockMovement:
     """Change the locked stock row, write the movement and the audit record (no commit)."""
@@ -139,8 +140,15 @@ async def _apply(
         entity_type="stock",
         entity_id=f"{stock.product_id}:{stock.warehouse_id}",
         old_data={"quantity": before},
-        new_data={"quantity": after, "type": movement_type.value, "movement_id": movement.id},
+        new_data={
+            "quantity": after,
+            "type": movement_type.value,
+            "change": f"{change:+}",
+            "movement_id": movement.id,
+            "comment": movement.comment,
+        },
         request=request,
+        label=label,
     )
     return movement
 
@@ -159,6 +167,7 @@ async def income(
         actor=actor,
         comment=data.comment,
         request=request,
+        label=f"{product.name} @ {warehouse.name}",
     )
     await session.commit()
     return _movement_read(movement, product, warehouse, actor)
@@ -178,6 +187,7 @@ async def outcome(
         actor=actor,
         comment=data.comment,
         request=request,
+        label=f"{product.name} @ {warehouse.name}",
     )
     await session.commit()
     return _movement_read(movement, product, warehouse, actor)
@@ -198,6 +208,7 @@ async def adjustment(
         actor=actor,
         comment=data.comment,
         request=request,
+        label=f"{product.name} @ {warehouse.name}",
     )
     await session.commit()
     return _movement_read(movement, product, warehouse, actor)
@@ -224,6 +235,7 @@ async def transfer(
         actor=actor,
         comment=data.comment,
         request=request,
+        label=f"{product.name} @ {source.name}",
         transfer_group=group,
     )
     in_movement = await _apply(
@@ -234,6 +246,7 @@ async def transfer(
         actor=actor,
         comment=data.comment,
         request=request,
+        label=f"{product.name} @ {target.name}",
         transfer_group=group,
     )
     await session.commit()
@@ -265,6 +278,7 @@ async def set_min_quantity(
         old_data={"min_quantity": old_value},
         new_data={"min_quantity": data.min_quantity},
         request=request,
+        label=f"{product.name} @ {warehouse.name}",
     )
     await session.commit()
     await session.refresh(stock)

@@ -3,7 +3,7 @@
 from decimal import Decimal
 from typing import Annotated
 
-from pydantic import BaseModel, ConfigDict, Field, PlainSerializer
+from pydantic import AfterValidator, BaseModel, ConfigDict, Field, PlainSerializer
 
 MONEY_STEP = Decimal("0.01")
 QUANTITY_STEP = Decimal("0.001")
@@ -34,11 +34,30 @@ def _quantity_to_str(value: Decimal) -> str:
 MoneyOut = Annotated[Decimal, PlainSerializer(_money_to_str, return_type=str)]
 QuantityOut = Annotated[Decimal, PlainSerializer(_quantity_to_str, return_type=str)]
 
-# Input types
-MoneyIn = Annotated[Decimal, Field(ge=0, le=MONEY_MAX, max_digits=12, decimal_places=2)]
-PositiveQuantity = Annotated[Decimal, Field(gt=0, le=QUANTITY_MAX, max_digits=14, decimal_places=3)]
+
+# Input types: validated, then brought to the column scale ("120" -> "120.00", "5" -> "5.000")
+def _money_scale(value: Decimal) -> Decimal:
+    return value.quantize(MONEY_STEP)
+
+
+def _quantity_scale(value: Decimal) -> Decimal:
+    return value.quantize(QUANTITY_STEP)
+
+
+MoneyIn = Annotated[
+    Decimal,
+    Field(ge=0, le=MONEY_MAX, max_digits=12, decimal_places=2),
+    AfterValidator(_money_scale),
+]
+PositiveQuantity = Annotated[
+    Decimal,
+    Field(gt=0, le=QUANTITY_MAX, max_digits=14, decimal_places=3),
+    AfterValidator(_quantity_scale),
+]
 NonNegativeQuantity = Annotated[
-    Decimal, Field(ge=0, le=QUANTITY_MAX, max_digits=14, decimal_places=3)
+    Decimal,
+    Field(ge=0, le=QUANTITY_MAX, max_digits=14, decimal_places=3),
+    AfterValidator(_quantity_scale),
 ]
 
 PageNumber = Annotated[int, Field(ge=1, le=100_000)]

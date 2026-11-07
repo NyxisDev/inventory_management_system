@@ -6,7 +6,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models import AuditAction, Category, Employee, Product
 from app.schemas.category import CategoryCreate, CategoryTreeNode, CategoryUpdate
-from app.services.audit import log_action
+from app.services.audit import CATEGORY_FIELDS, log_action, snapshot
 from app.services.errors import ConflictError, NotFoundError
 from app.services.slugs import unique_slug
 
@@ -85,6 +85,8 @@ async def create_category(
         action=AuditAction.create,
         entity_type="category",
         entity_id=category.id,
+        new_data=snapshot(category, CATEGORY_FIELDS),
+        label=category.name,
         request=request,
     )
     await session.commit()
@@ -99,6 +101,7 @@ async def update_category(
     request: Request,
 ) -> Category:
     category = await get_category(session, category_id)
+    before = snapshot(category, CATEGORY_FIELDS)
     fields = data.model_fields_set
 
     if "parent_id" in fields and data.parent_id != category.parent_id:
@@ -125,6 +128,9 @@ async def update_category(
         action=AuditAction.update,
         entity_type="category",
         entity_id=category.id,
+        old_data=before,
+        new_data=snapshot(category, CATEGORY_FIELDS),
+        label=category.name,
         request=request,
     )
     await session.commit()
@@ -148,6 +154,8 @@ async def delete_category(
         action=AuditAction.delete,
         entity_type="category",
         entity_id=category.id,
+        old_data=snapshot(category, CATEGORY_FIELDS),
+        label=category.name,
         request=request,
     )
     await session.delete(category)

@@ -20,7 +20,7 @@ from app.schemas.product import (
     StockRow,
 )
 from app.services import media
-from app.services.audit import log_action
+from app.services.audit import PRODUCT_FIELDS, log_action, snapshot
 from app.services.errors import ConflictError, NotFoundError
 from app.services.query import escape_like, order_by_from_sort
 from app.services.sanitize import clean_description
@@ -245,6 +245,8 @@ async def create_product(
         action=AuditAction.create,
         entity_type="product",
         entity_id=product.id,
+        new_data=snapshot(product, PRODUCT_FIELDS),
+        label=product.name,
         request=request,
     )
     await session.commit()
@@ -259,6 +261,7 @@ async def update_product(
     request: Request,
 ) -> ProductRead:
     product = await get_product_model(session, product_id)
+    before = snapshot(product, PRODUCT_FIELDS)
     fields = data.model_fields_set
 
     if data.sku is not None and data.sku != product.sku:
@@ -300,6 +303,9 @@ async def update_product(
         action=AuditAction.update,
         entity_type="product",
         entity_id=product.id,
+        old_data=before,
+        new_data=snapshot(product, PRODUCT_FIELDS),
+        label=product.name,
         request=request,
     )
     await session.commit()
@@ -315,6 +321,7 @@ async def delete_product(
         select(exists().where(StockMovement.product_id == product.id))
     )
     if has_movements:
+        before = snapshot(product, PRODUCT_FIELDS)
         product.is_archived = True
         product.is_published = False
         product.updated_by = actor.id
@@ -324,6 +331,9 @@ async def delete_product(
             action=AuditAction.update,
             entity_type="product",
             entity_id=product.id,
+            old_data=before,
+            new_data=snapshot(product, PRODUCT_FIELDS),
+            label=product.name,
             request=request,
         )
         await session.commit()
@@ -335,6 +345,8 @@ async def delete_product(
         action=AuditAction.delete,
         entity_type="product",
         entity_id=product.id,
+        old_data=snapshot(product, PRODUCT_FIELDS),
+        label=product.name,
         request=request,
     )
     await session.delete(product)

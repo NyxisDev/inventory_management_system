@@ -3,6 +3,7 @@
 from fastapi import APIRouter
 
 from app.api.v1.routers import (
+    audit,
     auth,
     categories,
     employees,
@@ -29,3 +30,4 @@ api_router.include_router(products.router)
 api_router.include_router(images.router)
 api_router.include_router(stock.router)
 api_router.include_router(public.router)
+api_router.include_router(audit.router)

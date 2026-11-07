@@ -8,7 +8,7 @@ from starlette.concurrency import run_in_threadpool
 from app.models import AuditAction, Employee, Product, ProductImage
 from app.schemas.product import ImageRead, ImageUpdate
 from app.services import media
-from app.services.audit import log_action
+from app.services.audit import IMAGE_FIELDS, log_action, snapshot
 from app.services.errors import BadRequestError, ConflictError, NotFoundError
 from app.services.products import image_read
 
@@ -87,6 +87,8 @@ async def upload_images(
                 action=AuditAction.create,
                 entity_type="product_image",
                 entity_id=row.id,
+                new_data=snapshot(row, IMAGE_FIELDS),
+                label=f"photo of {product.name}",
                 request=request,
             )
         await session.commit()
@@ -117,8 +119,9 @@ async def update_image(
     actor: Employee,
     request: Request,
 ) -> ImageRead:
-    await _get_product(session, product_id)
+    product = await _get_product(session, product_id)
     image = await _get_image(session, product_id, image_id)
+    before = snapshot(image, IMAGE_FIELDS)
     if data.is_main and not image.is_main:
         # Unset the old main image first: the partial unique index allows only one
         await session.execute(
@@ -136,6 +139,9 @@ async def update_image(
         action=AuditAction.update,
         entity_type="product_image",
         entity_id=image.id,
+        old_data=before,
+        new_data=snapshot(image, IMAGE_FIELDS),
+        label=f"photo of {product.name}",
         request=request,
     )
     await session.commit()
@@ -146,7 +152,7 @@ async def update_image(
 async def delete_image(
     session: AsyncSession, product_id: int, image_id: int, actor: Employee, request: Request
 ) -> None:
-    await _get_product(session, product_id)
+    product = await _get_product(session, product_id)
     image = await _get_image(session, product_id, image_id)
     file_path = image.file_path
     was_main = image.is_main
@@ -156,6 +162,8 @@ async def delete_image(
         action=AuditAction.delete,
         entity_type="product_image",
         entity_id=image.id,
+        old_data=snapshot(image, IMAGE_FIELDS),
+        label=f"photo of {product.name}",
         request=request,
     )
     await session.delete(image)
