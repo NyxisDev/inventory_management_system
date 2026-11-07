@@ -1,0 +1,1 @@
+import{A as e,N as t,R as n,l as r,m as i}from"./runtime-core.esm-bundler-Bix4zBTu.js";import{n as a,t as o}from"./QLayout-HHyQSfqD.js";import{f as s}from"./render-BREP6KdQ.js";var c={__name:`AuthLayout`,setup(c){return s().dark.set(!0),(s,c)=>{let l=t(`router-view`);return e(),r(o,null,{default:n(()=>[i(a,null,{default:n(()=>[i(l)]),_:1})]),_:1})}}};export{c as default};

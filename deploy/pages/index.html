@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>BuildStock demo</title>
-<meta name="description" content="Odkazy na demo BuildStock: katalóg a prezentácia.">
+<meta name="description" content="Odkazy na demo BuildStock: katalóg, administrácia a prezentácia.">
 <link rel="icon" href="catalog/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -38,7 +38,6 @@
 
   .grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
   @media (min-width: 640px) { .grid { grid-template-columns: repeat(2, 1fr); } }
-  @media (min-width: 960px) { .grid { grid-template-columns: repeat(3, 1fr); } }
   a.card {
     display: flex; flex-direction: column; gap: 10px;
     padding: 24px; min-height: 200px;
@@ -73,6 +72,12 @@
       <h2>Katalóg</h2>
       <p>Produkty, ceny a zásoby podľa skladov. Slovensky aj anglicky, funguje na mobile.</p>
       <span class="go">Otvoriť katalóg →</span>
+    </a>
+    <a class="card" href="admin/#/demo">
+      <span class="tag">Pre zamestnancov</span>
+      <h2>Administrácia</h2>
+      <p>Produkty, zásoby, pohyby tovaru, zamestnanci a záznam zmien. Ukážka bez prihlásenia, zmeny sa po obnovení stránky stratia.</p>
+      <span class="go">Otvoriť administráciu →</span>
     </a>
     <a class="card" href="pitch/slidy.html">
       <span class="tag">Build Day</span>

@@ -1,8 +1,10 @@
 name: Demo on GitHub Pages
 
-# Static demo: links page, catalog (SPA on built-in demo data) and the
-# Build Day pitch. No backend, no secrets. The admin app needs the backend
-# API, so it is not part of this static demo.
+# Static demo: links page, catalog (SPA on built-in demo data), admin demo
+# and the Build Day pitch. No backend, no secrets.
+# deploy/pages/admin is a prebuilt static snapshot of the admin demo workspace
+# (commit 9079697, sample data in the browser), because the current admin app
+# needs the backend API.
 
 on:
   push:
@@ -43,6 +45,7 @@ jobs:
         run: |
           mkdir -p _site
           cp deploy/pages/index.html _site/
+          cp -r deploy/pages/admin _site/admin
           cp -r shop-site/dist/spa _site/catalog
           cp -r pitch _site/pitch
           touch _site/.nojekyll
