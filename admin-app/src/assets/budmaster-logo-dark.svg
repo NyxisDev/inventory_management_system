@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 360 64">
+  <g id="icon" fill="#FF8A00" transform="translate(10 0)">
+    <path d="M32 7 59 28 54 34 32 17 10 34 5 28Z"/>
+    <rect x="13" y="34" width="17" height="9"/>
+    <rect x="34" y="34" width="17" height="9"/>
+    <rect x="13" y="47" width="10" height="10"/>
+    <rect x="27" y="47" width="24" height="10"/>
+  </g>
+  <g id="wordmark">
+    <text x="90" y="49" font-family="Outfit, 'Inter', Arial, sans-serif"
+          font-size="48" font-weight="700" letter-spacing="-0.02em"><tspan fill="#FFFFFF">Bud</tspan><tspan fill="#FF8A00">master</tspan></text>
+  </g>
+</svg>
