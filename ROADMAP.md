@@ -1,6 +1,6 @@
 # Roadmap
 
-- [ ] **Database:** PostgreSQL schema, SQLAlchemy models, Alembic migrations, seed admin
+- [x] **Database:** PostgreSQL schema, SQLAlchemy models, Alembic migrations, seed admin
 - [ ] **Backend API:** auth with roles, employees, categories, warehouses, products, photos, stock operations, public API
 - [ ] **Audit log:** record every employee action with old and new values, viewer and CSV export
 - [ ] **Admin app:** Quasar UI for products, stock, employees and the audit log

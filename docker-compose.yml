@@ -11,6 +11,9 @@ services:
       POSTGRES_DB: ${POSTGRES_DB:-inventory}
       POSTGRES_USER: ${POSTGRES_USER:-postgres}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
+      # Read by backend/db/init_roles.sql on the first start
+      APP_OWNER_PASSWORD: ${APP_OWNER_PASSWORD:?Set APP_OWNER_PASSWORD in .env}
+      APP_USER_PASSWORD: ${APP_USER_PASSWORD:?Set APP_USER_PASSWORD in .env}
     volumes:
       - pgdata:/var/lib/postgresql/data
       # Creates the app_owner / app_user roles on the first start (backend/db/init_roles.sql).
