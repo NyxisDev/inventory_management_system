@@ -1,5 +1,5 @@
 <template>
-  <q-dialog v-model="model" position="right" full-height class="mobile-menu-dialog">
+  <q-dialog v-model="model" position="right" full-height class="side-sheet-dialog">
     <div class="mobile-menu" role="navigation" :aria-label="t('nav.mainNavigation')">
       <div class="mobile-menu__head">
         <SiteLogo />
@@ -20,11 +20,12 @@
       <ul class="mobile-menu__cats">
         <li v-for="cat in catalog.categories" :key="cat.slug">
           <router-link :to="{ name: 'category', params: { categorySlug: cat.slug } }" class="mobile-menu__cat">
-            <q-icon :name="categoryIcon(cat.slug)" size="20px" />
             {{ cat.name }}
           </router-link>
         </li>
       </ul>
+
+      <LanguageSwitcher variant="segmented" class="mobile-menu__lang" />
 
       <div class="mobile-menu__contact">
         <q-btn
@@ -35,7 +36,9 @@
           :icon="mdiPhone"
           :label="config.phone"
         />
-        <p v-for="line in config.hours" :key="line" class="mobile-menu__hours">{{ line }}</p>
+        <p v-if="config.hours.length" class="mobile-menu__hours">
+          <span v-for="line in config.hours" :key="line">{{ line }}</span>
+        </p>
       </div>
     </div>
   </q-dialog>
@@ -48,8 +51,8 @@ import { useI18n } from 'vue-i18n'
 import { mdiClose, mdiPhone } from '@quasar/extras/mdi-v7'
 import { useConfigStore } from '@/stores/config'
 import { useCatalogStore } from '@/stores/catalog'
-import { categoryIcon } from '@/composables/category-icons'
 import SiteLogo from './SiteLogo.vue'
+import LanguageSwitcher from './LanguageSwitcher.vue'
 
 const model = defineModel({ type: Boolean, default: false })
 
@@ -71,8 +74,16 @@ watch(
   width: min(360px, 88vw);
   height: 100%;
   max-height: 100% !important;
+  // Scrolls only on very short screens; the bar itself stays hidden.
   overflow-y: auto;
+  scrollbar-width: none;
+  overscroll-behavior: contain;
   padding: 16px 20px 28px;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
   background: $color-panel;
   border-left: 1px solid $color-border;
   border-radius: 0 !important;
@@ -82,25 +93,25 @@ watch(
     align-items: center;
     justify-content: space-between;
     height: 56px;
-    margin-bottom: 16px;
+    margin-bottom: 8px;
   }
 
   &__links {
     display: flex;
     flex-direction: column;
     gap: 2px;
-    padding-bottom: 16px;
+    padding-bottom: 12px;
     border-bottom: 1px solid $color-border;
   }
 
   &__link {
     display: flex;
     align-items: center;
-    min-height: 48px;
+    min-height: 46px;
     padding: 0 12px;
     border-radius: $radius-button;
     font-family: $font-heading;
-    font-size: 1.25rem;
+    font-size: 1.1875rem;
     font-weight: 700;
     color: $color-text;
 
@@ -111,7 +122,7 @@ watch(
   }
 
   &__label {
-    margin: 20px 12px 8px;
+    margin: 16px 4px 8px;
     font-size: 0.75rem;
     font-weight: 600;
     letter-spacing: 0.12em;
@@ -119,24 +130,32 @@ watch(
     color: $color-text-muted;
   }
 
+  // Categories wrap as compact chips, so the whole menu fits on most phones.
   &__cats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
     list-style: none;
-    margin: 0;
+    margin: 0 4px;
     padding: 0;
+
+    > li {
+      max-width: 100%;
+    }
   }
 
   &__cat {
-    display: flex;
+    display: inline-flex;
     align-items: center;
-    gap: 12px;
-    min-height: 44px;
+    gap: 8px;
+    max-width: 100%;
+    min-height: 40px;
     padding: 0 12px;
+    border: 1px solid $color-border;
     border-radius: $radius-button;
     color: $color-text;
-
-    .q-icon {
-      color: $primary;
-    }
+    font-size: 0.9375rem;
+    line-height: 1.25;
 
     &:hover {
       background: rgba(255, 255, 255, 0.05);
@@ -144,15 +163,23 @@ watch(
     }
   }
 
+  &__lang {
+    margin: 16px 4px 0;
+  }
+
   &__contact {
-    margin-top: 24px;
-    padding-top: 20px;
+    margin-top: 16px;
+    padding-top: 16px;
     border-top: 1px solid $color-border;
   }
 
   &__hours {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 12px;
     margin-top: 10px;
-    font-size: 0.875rem;
+    font-size: 0.8125rem;
+    line-height: 1.5;
     color: $color-text-muted;
   }
 }

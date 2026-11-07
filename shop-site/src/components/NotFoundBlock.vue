@@ -40,11 +40,7 @@ const { t } = useI18n()
     font-size: clamp(6rem, 22vw, 11rem);
     line-height: 1;
     letter-spacing: -0.04em;
-    color: transparent;
-    -webkit-text-stroke: 2px rgba(255, 138, 0, 0.7);
-    background: linear-gradient(180deg, rgba(255, 138, 0, 0.18), transparent);
-    -webkit-background-clip: text;
-    background-clip: text;
+    color: $primary;
   }
 
   &__title {

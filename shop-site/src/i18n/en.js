@@ -1,5 +1,6 @@
 // English UI strings of the catalog site.
-// Add other languages as sibling files (sk.js, uk.js) with the same keys.
+// Other languages are sibling files (sk.js, later uk.js) with the same keys;
+// register them in i18n/index.js and i18n/locales.js.
 export default {
   meta: {
     homeTitle: 'Building materials with live stock',
@@ -23,6 +24,7 @@ export default {
     closeMenu: 'Close menu',
     mainNavigation: 'Main navigation',
     callUs: 'Call us',
+    language: 'Language',
   },
   search: {
     label: 'Search products',
@@ -37,18 +39,14 @@ export default {
     noResultsHint: 'Check the spelling, try a shorter word or browse the catalog.',
   },
   home: {
-    heroEyebrow: 'Building materials warehouse',
     heroTitleLine1: 'Everything for your build,',
     heroTitleLine2: 'in stock right now',
     heroPoints: ['Live stock in every warehouse', 'Clear prices per unit', 'Pick up or delivery'],
     viewCatalog: 'View catalog',
     contactUs: 'Contact us',
-    statsWarehouses: 'warehouses',
-    statsProducts: 'products online',
-    statsCategories: 'categories',
-    statsLive: 'Live',
-    statsUpdated: 'stock after every operation',
-    benefitsEyebrow: 'Why customers check us first',
+    factsProducts: 'no products | {n} product in the catalog | {n} products in the catalog',
+    factsCategories: 'no categories | {n} category | {n} categories',
+    factsWarehouses: 'no warehouses | {n} warehouse | {n} warehouses',
     benefitsTitle: 'Know what is on the shelf before you drive',
     benefits: [
       {
@@ -68,12 +66,10 @@ export default {
         text: 'Call us with your plan and quantities, and we will help you pick materials that fit.',
       },
     ],
-    categoriesEyebrow: 'Catalog',
     categoriesTitle: 'Shop by category',
     categoriesText: 'From the foundation to the finishing touches.',
     allCategories: 'All categories',
     productsCount: 'No products | 1 product | {n} products',
-    newEyebrow: 'Just arrived',
     newTitle: 'New arrivals',
     newText: 'The latest products added to our warehouses.',
     seeAllProducts: 'See all products',
@@ -137,7 +133,6 @@ export default {
     stockUpdated: 'Stock is updated after every operation in the warehouse.',
   },
   contacts: {
-    eyebrow: 'Contacts',
     title: 'Call, write or come by',
     text: 'We do not take orders online. Call us to check a product or to reserve it, and pick it up at the warehouse that suits you.',
     phone: 'Phone',

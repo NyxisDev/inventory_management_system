@@ -34,6 +34,8 @@ export default defineSsrMiddleware(({ app, resolve, render, serve }) => {
       const headers = {
         // Stock changes with every warehouse operation: always revalidate pages.
         'Cache-Control': 'no-cache',
+        // The language is picked from ?lang=, the "lang" cookie or Accept-Language.
+        Vary: 'Cookie, Accept-Language',
       }
       // Vite's dev server injects its own inline scripts, so CSP is production only.
       if (import.meta.env.QUASAR_PROD) headers['Content-Security-Policy'] = contentSecurityPolicy(nonce)

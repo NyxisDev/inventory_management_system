@@ -9,19 +9,15 @@
     <!-- Benefits -->
     <section class="section section--panel" aria-labelledby="benefits-title">
       <div class="container">
-        <div v-reveal class="section-head">
-          <div class="section-head__text">
-            <p class="eyebrow">{{ t('home.benefitsEyebrow') }}</p>
-            <h2 id="benefits-title">{{ t('home.benefitsTitle') }}</h2>
-          </div>
+        <div class="benefits">
+          <h2 id="benefits-title" v-reveal class="benefits__title">{{ t('home.benefitsTitle') }}</h2>
+          <ul class="benefits__list">
+            <li v-for="benefit in benefits" :key="benefit.title" class="benefit">
+              <h3 class="benefit__title">{{ benefit.title }}</h3>
+              <p class="benefit__text">{{ benefit.text }}</p>
+            </li>
+          </ul>
         </div>
-        <ul class="benefits">
-          <li v-for="(benefit, i) in benefits" :key="benefit.title" v-reveal="i * 80" class="benefit card">
-            <span class="benefit__icon" aria-hidden="true"><q-icon :name="benefitIcons[i]" size="26px" /></span>
-            <h3 class="benefit__title">{{ benefit.title }}</h3>
-            <p class="benefit__text">{{ benefit.text }}</p>
-          </li>
-        </ul>
       </div>
     </section>
 
@@ -30,7 +26,6 @@
       <div class="container">
         <div v-reveal class="section-head">
           <div class="section-head__text">
-            <p class="eyebrow">{{ t('home.categoriesEyebrow') }}</p>
             <h2 id="categories-title">{{ t('home.categoriesTitle') }}</h2>
             <p>{{ t('home.categoriesText') }}</p>
           </div>
@@ -56,7 +51,6 @@
       <div class="container">
         <div v-reveal class="section-head">
           <div class="section-head__text">
-            <p class="eyebrow">{{ t('home.newEyebrow') }}</p>
             <h2 id="new-title">{{ t('home.newTitle') }}</h2>
             <p>{{ t('home.newText') }}</p>
           </div>
@@ -104,11 +98,7 @@ import { useI18n } from 'vue-i18n'
 import {
   mdiArrowRight,
   mdiEmailOutline,
-  mdiHardHat,
-  mdiMapMarkerMultipleOutline,
   mdiPhone,
-  mdiTagOutline,
-  mdiWarehouse,
 } from '@quasar/extras/mdi-v7'
 import { useCatalogStore } from '@/stores/catalog'
 import { useConfigStore } from '@/stores/config'
@@ -129,7 +119,6 @@ const { t, tm, rt } = useI18n()
 const catalog = useCatalogStore()
 const config = useConfigStore()
 
-const benefitIcons = [mdiWarehouse, mdiTagOutline, mdiMapMarkerMultipleOutline, mdiHardHat]
 const benefits = computed(() => tm('home.benefits').map((b) => ({ title: rt(b.title), text: rt(b.text) })))
 
 usePageMeta(() => ({
@@ -150,47 +139,52 @@ usePageMeta(() => ({
 </script>
 
 <style lang="scss" scoped>
+// Heading on the left, four short points on the right; no card boxes.
 .benefits {
-  list-style: none;
-  margin: 0;
-  padding: 0;
   display: grid;
-  gap: 20px;
-  grid-template-columns: 1fr;
+  gap: 32px;
 
-  @media (min-width: 640px) {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+  @media (min-width: 1024px) {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    gap: 64px;
+    align-items: start;
   }
 
-  @media (min-width: 1100px) {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+  &__title {
+    max-width: 16ch;
+    text-wrap: balance;
+  }
+
+  &__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0 40px;
+
+    @media (min-width: 640px) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
   }
 }
 
 .benefit {
-  padding: 28px 24px;
+  padding: 20px 0 28px;
+  border-top: 1px solid $color-border-strong;
 
-  &__icon {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 52px;
-    height: 52px;
-    margin-bottom: 20px;
-    border-radius: 12px;
-    border: 1px solid rgba(255, 138, 0, 0.35);
-    color: $primary;
-    background: $color-primary-soft;
+  &:first-child {
+    border-top-color: $primary;
   }
 
   &__title {
     font-size: 1.1875rem;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
   }
 
   &__text {
     color: $color-text-muted;
     font-size: 0.9375rem;
+    max-width: 44ch;
   }
 }
 
@@ -217,17 +211,17 @@ usePageMeta(() => ({
 }
 
 .cta {
-  position: relative;
   display: flex;
   flex-direction: column;
   gap: 28px;
-  padding: 40px 28px;
+  padding: 32px 20px;
   border: 1px solid rgba(255, 138, 0, 0.35);
   border-radius: $radius-card;
-  overflow: hidden;
-  background:
-    radial-gradient(circle at 100% 0%, rgba(255, 138, 0, 0.22), transparent 55%),
-    linear-gradient(135deg, $color-panel, $color-panel-raised);
+  background: $color-panel;
+
+  @media (min-width: 480px) {
+    padding: 40px 28px;
+  }
 
   @media (min-width: 900px) {
     flex-direction: row;
@@ -249,7 +243,31 @@ usePageMeta(() => ({
     display: flex;
     flex-wrap: wrap;
     gap: 12px;
-    flex: none;
+    min-width: 0;
+
+    @media (min-width: 900px) {
+      flex: none;
+      flex-direction: column;
+    }
+
+    .btn {
+      max-width: 100%;
+
+      @media (max-width: 479px) {
+        width: 100%;
+      }
+
+      :deep(.q-btn__content) {
+        flex-wrap: nowrap;
+        min-width: 0;
+      }
+
+      :deep(.block) {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+    }
   }
 }
 </style>
