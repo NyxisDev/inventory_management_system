@@ -152,26 +152,6 @@ a {
   }
 }
 
-.eyebrow {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 0.8125rem;
-  font-weight: 600;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: $primary;
-  margin-bottom: 12px;
-
-  &::before {
-    content: '';
-    width: 24px;
-    height: 2px;
-    background: $primary;
-    border-radius: 2px;
-  }
-}
-
 // Buttons (applied on top of QBtn)
 
 .btn {
@@ -327,6 +307,11 @@ a {
   background: $color-panel;
   border: 1px solid $color-border;
   border-radius: 12px;
+}
+
+// Side sheets (mobile menu, filters) use the full screen height, without Quasar's dialog margin.
+.side-sheet-dialog .q-dialog__inner {
+  padding: 0 !important;
 }
 
 .q-skeleton--dark {

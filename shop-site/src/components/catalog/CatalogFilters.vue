@@ -1,6 +1,6 @@
 <template>
   <div class="filters">
-    <section class="filters__group" aria-labelledby="f-categories">
+    <section v-if="showCategories" class="filters__group" aria-labelledby="f-categories">
       <h2 id="f-categories" class="filters__title">{{ t('catalog.categories') }}</h2>
       <ul class="filters__tree">
         <li>
@@ -120,17 +120,19 @@ const props = defineProps({
   categories: { type: Array, default: () => [] },
   activeSlug: { type: String, default: '' },
   filters: { type: Object, required: true },
+  // Phones and tablets show categories as chips on the page instead.
+  showCategories: { type: Boolean, default: true },
 })
 const emit = defineEmits(['change'])
 
-const { t } = useI18n()
+const { t, locale } = useI18n()
 const config = useConfigStore()
 
 const sliderMax = computed(() => Math.max(PRICE_SLIDER_MAX, Math.ceil(props.filters.priceMax ?? 0)))
 const hasActive = computed(() => hasActiveFilters(props.filters))
 
 const currencySymbol = computed(() => {
-  const parts = new Intl.NumberFormat('en', { style: 'currency', currency: config.currency }).formatToParts(0)
+  const parts = new Intl.NumberFormat(locale.value, { style: 'currency', currency: config.currency }).formatToParts(0)
   return parts.find((p) => p.type === 'currency')?.value ?? config.currency
 })
 
@@ -231,6 +233,7 @@ function emitChange(patch) {
     color: #cbd5e1;
     font-size: 0.9375rem;
     font-weight: 500;
+    line-height: 1.3;
 
     &:hover {
       background: rgba(255, 255, 255, 0.05);
@@ -278,6 +281,7 @@ function emitChange(patch) {
 
     .q-input {
       flex: 1;
+      min-width: 0;
     }
   }
 

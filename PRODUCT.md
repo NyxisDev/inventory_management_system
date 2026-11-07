@@ -31,7 +31,7 @@ No online ordering and no cart: the catalog leads to a phone call or a visit. Sh
 ## Capabilities and Constraints
 
 - Roles: `admin` and `staff`. Customers are read-only.
-- Interface language is English now; Slovak and Ukrainian are planned (all strings go through vue-i18n).
+- The catalog site is in English and Slovak (switcher in the header; choice kept in a `lang` cookie, `?lang=sk` links for search engines). Ukrainian is planned. Product and category names come from the data and are not translated.
 - Currency comes from the `CURRENCY` setting (default EUR).
 - Open decisions: shop name, logo, real contacts, photography.
 

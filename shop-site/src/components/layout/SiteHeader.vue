@@ -22,6 +22,8 @@
           <span>{{ config.phone }}</span>
         </a>
 
+        <LanguageSwitcher class="site-header__lang" />
+
         <q-btn
           flat
           round
@@ -68,6 +70,7 @@ import { mdiMagnify, mdiMenu, mdiPhone } from '@quasar/extras/mdi-v7'
 import { useConfigStore } from '@/stores/config'
 import SiteLogo from './SiteLogo.vue'
 import SearchBox from './SearchBox.vue'
+import LanguageSwitcher from './LanguageSwitcher.vue'
 
 defineEmits(['open-menu'])
 
@@ -130,8 +133,12 @@ onBeforeUnmount(() => window.removeEventListener('scroll', onScroll))
   &__row {
     display: flex;
     align-items: center;
-    gap: 24px;
+    gap: 12px;
     height: $header-height;
+
+    @media (min-width: 1024px) {
+      gap: 24px;
+    }
   }
 
   &__nav {
@@ -183,9 +190,14 @@ onBeforeUnmount(() => window.removeEventListener('scroll', onScroll))
 
   &__actions {
     display: flex;
+    flex: none;
     align-items: center;
     gap: 4px;
     margin-left: auto;
+
+    @media (max-width: 379px) {
+      gap: 0;
+    }
 
     @media (min-width: 1024px) {
       margin-left: 0;
@@ -217,6 +229,15 @@ onBeforeUnmount(() => window.removeEventListener('scroll', onScroll))
     }
 
     @media (min-width: 1024px) {
+      display: inline-flex;
+    }
+  }
+
+  // Small phones get the language switch in the menu instead.
+  &__lang {
+    display: none;
+
+    @media (min-width: 480px) {
       display: inline-flex;
     }
   }

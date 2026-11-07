@@ -2,7 +2,6 @@
   <div>
     <PageHeader
       :title="t('contacts.title')"
-      :eyebrow="t('contacts.eyebrow')"
       :subtitle="t('contacts.text')"
       :crumbs="[{ label: t('nav.home'), to: '/' }, { label: t('nav.contacts') }]"
     />
@@ -11,23 +10,27 @@
       <div class="container">
         <ul class="contacts__cards">
           <li v-reveal class="contact-card card card--panel">
-            <span class="contact-card__icon"><q-icon :name="mdiPhone" size="24px" /></span>
-            <h2 class="contact-card__label">{{ t('contacts.phone') }}</h2>
+            <h2 class="contact-card__label">
+              <q-icon :name="mdiPhone" size="20px" aria-hidden="true" />
+              {{ t('contacts.phone') }}</h2>
             <a :href="config.phoneHref" class="contact-card__value contact-card__value--big">{{ config.phone }}</a>
           </li>
           <li v-reveal="80" class="contact-card card card--panel">
-            <span class="contact-card__icon"><q-icon :name="mdiEmailOutline" size="24px" /></span>
-            <h2 class="contact-card__label">{{ t('contacts.email') }}</h2>
+            <h2 class="contact-card__label">
+              <q-icon :name="mdiEmailOutline" size="20px" aria-hidden="true" />
+              {{ t('contacts.email') }}</h2>
             <a :href="config.emailHref" class="contact-card__value">{{ config.email }}</a>
           </li>
           <li v-reveal="160" class="contact-card card card--panel">
-            <span class="contact-card__icon"><q-icon :name="mdiMapMarkerOutline" size="24px" /></span>
-            <h2 class="contact-card__label">{{ t('contacts.address') }}</h2>
+            <h2 class="contact-card__label">
+              <q-icon :name="mdiMapMarkerOutline" size="20px" aria-hidden="true" />
+              {{ t('contacts.address') }}</h2>
             <p class="contact-card__value">{{ config.address }}</p>
           </li>
           <li v-reveal="240" class="contact-card card card--panel">
-            <span class="contact-card__icon"><q-icon :name="mdiClockOutline" size="24px" /></span>
-            <h2 class="contact-card__label">{{ t('contacts.hours') }}</h2>
+            <h2 class="contact-card__label">
+              <q-icon :name="mdiClockOutline" size="20px" aria-hidden="true" />
+              {{ t('contacts.hours') }}</h2>
             <p class="contact-card__value">
               <span v-for="line in config.hours" :key="line" class="contact-card__line">{{ line }}</span>
             </p>
@@ -49,18 +52,7 @@
 
         <ul v-else class="warehouses">
           <li v-for="(w, i) in catalog.warehouses" :key="w.name" v-reveal="(i % 3) * 80" class="warehouse card">
-            <div class="warehouse__map" aria-hidden="true">
-              <svg viewBox="0 0 320 140" preserveAspectRatio="xMidYMid slice">
-                <rect width="320" height="140" fill="#0f172a" />
-                <path :d="mapRoads[i % mapRoads.length]" stroke="#1e2a47" stroke-width="10" fill="none" stroke-linecap="round" />
-                <path :d="mapRoads[(i + 1) % mapRoads.length]" stroke="#1a2440" stroke-width="5" fill="none" stroke-linecap="round" />
-                <circle cx="160" cy="66" r="26" fill="rgba(255,138,0,0.18)" />
-                <path d="M160 40c-11 0-19 8-19 18 0 14 19 32 19 32s19-18 19-32c0-10-8-18-19-18z" fill="#ff8a00" />
-                <circle cx="160" cy="58" r="6" fill="#0b1121" />
-              </svg>
-            </div>
             <div class="warehouse__body">
-              <span class="warehouse__num">{{ String(i + 1).padStart(2, '0') }}</span>
               <h3 class="warehouse__name">{{ w.name }}</h3>
               <p class="warehouse__address">{{ w.address }}</p>
               <a
@@ -100,13 +92,6 @@ const { t } = useI18n()
 const catalog = useCatalogStore()
 const config = useConfigStore()
 
-// Decorative street lines behind the pin (not a real map).
-const mapRoads = [
-  'M-10 100 C80 80 140 120 330 60 M90 -10 L120 150',
-  'M-10 40 L330 90 M220 -10 C200 60 240 100 210 150',
-  'M-10 120 C100 40 200 140 330 30 M40 -10 L70 150',
-]
-
 function mapLink(address) {
   return `https://www.openstreetmap.org/search?query=${encodeURIComponent(address)}`
 }
@@ -139,35 +124,28 @@ usePageMeta(() => ({
 }
 
 .contact-card {
-  padding: 28px 24px;
-
-  &__icon {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 52px;
-    height: 52px;
-    margin-bottom: 20px;
-    border-radius: 12px;
-    background: $color-primary-soft;
-    color: $primary;
-  }
+  padding: 24px;
 
   &__label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
     font-family: $font-body;
-    font-size: 0.75rem;
+    font-size: 0.9375rem;
     font-weight: 600;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
     color: $color-text-muted;
-    margin-bottom: 8px;
+
+    .q-icon {
+      color: $primary;
+    }
   }
 
   &__value {
     display: block;
     color: $color-text;
     font-weight: 500;
-    word-break: break-word;
+    overflow-wrap: anywhere;
 
     &--big {
       font-family: $font-heading;
@@ -206,30 +184,8 @@ usePageMeta(() => ({
   overflow: hidden;
   background: $color-page;
 
-  &__map {
-    height: 140px;
-    border-bottom: 1px solid $color-border;
-
-    svg {
-      width: 100%;
-      height: 100%;
-      display: block;
-    }
-  }
-
   &__body {
-    position: relative;
     padding: 24px;
-  }
-
-  &__num {
-    position: absolute;
-    top: 20px;
-    right: 24px;
-    font-family: $font-heading;
-    font-weight: 700;
-    font-size: 1.75rem;
-    color: rgba(255, 255, 255, 0.08);
   }
 
   &__name {

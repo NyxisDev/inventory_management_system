@@ -22,8 +22,14 @@ const { t } = useI18n()
   display: inline-flex;
   align-items: center;
   gap: 12px;
+  min-width: 0;
   color: $color-text;
-  flex: none;
+  // The name comes from .env and may be long: it shrinks before the header overflows.
+  flex: 0 1 auto;
+
+  @media (max-width: 379px) {
+    gap: 8px;
+  }
 
   &:hover {
     color: $color-text;
@@ -33,6 +39,11 @@ const { t } = useI18n()
     width: 40px;
     height: 40px;
     flex: none;
+
+    @media (max-width: 379px) {
+      width: 36px;
+      height: 36px;
+    }
   }
 
   &__name {
@@ -40,6 +51,14 @@ const { t } = useI18n()
     font-weight: 700;
     font-size: 1.375rem;
     letter-spacing: -0.02em;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    @media (max-width: 379px) {
+      font-size: 1.125rem;
+    }
   }
 }
 </style>

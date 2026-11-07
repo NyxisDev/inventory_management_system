@@ -12,6 +12,8 @@ export const useConfigStore = defineStore('config', {
     hours: [],
     currency: 'EUR',
     mock: false,
+    // Interface language chosen for this request (see i18n/locales.js).
+    locale: 'en',
   }),
   getters: {
     phoneHref: (state) => `tel:${state.phone.replace(/[^\d+]/g, '')}`,

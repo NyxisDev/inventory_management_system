@@ -37,7 +37,7 @@ Build order: parts 0 → 7 of the prompts, strictly in sequence. Each part ends 
 - SQL through the ORM with bound parameters, sort fields from an allow-list. All input through Pydantic with `extra='forbid'`.
 - HTML descriptions are sanitized (bleach on the backend, DOMPurify on the frontend). Uploaded images are re-encoded with Pillow, with uuid names.
 - Settings come from `.env`; commit only `.env.example`. No secrets in code or in the frontend.
-- UI text and API errors are English, in vue-i18n (`en.js`). Code and comments are English. API errors look like `{"detail": "..."}`.
+- UI text goes through vue-i18n: `en.js` is the source, every key also in `sk.js` (Slovak, 4 plural forms). API errors are English and look like `{"detail": "..."}`. Code and comments are English.
 - Routers are thin, logic lives in `backend/app/services/`. Write complete files, no `...`.
 
 When convenience conflicts with security, choose security and tell the user. Before backend, auth, upload or nginx work, read the Security section of `docs/agent-rules.md`.

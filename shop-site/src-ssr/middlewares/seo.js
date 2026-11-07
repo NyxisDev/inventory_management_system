@@ -1,6 +1,7 @@
 import { defineSsrMiddleware } from '#q-app'
 import { createCatalogSource } from '../../src/services/catalog-source.js'
 import { isMock, readPublicConfig, readServerApiUrl } from '../../src/services/shop-config.js'
+import { DEFAULT_LOCALE, LOCALES, withLang } from '../../src/i18n/locales.js'
 
 const SITEMAP_TTL_MS = 10 * 60 * 1000
 const MAX_PAGES = 50 // 50 x 100 products is plenty for one shop
@@ -29,21 +30,21 @@ async function buildSitemap() {
   const source = createCatalogSource({ baseURL: readServerApiUrl(), mock: isMock() })
 
   const urls = [
-    { loc: `${siteUrl}/`, priority: '1.0' },
-    { loc: `${siteUrl}/catalog`, priority: '0.9' },
-    { loc: `${siteUrl}/contacts`, priority: '0.5' },
+    { path: '/', priority: '1.0' },
+    { path: '/catalog', priority: '0.9' },
+    { path: '/contacts', priority: '0.5' },
   ]
 
   const categories = await source.getCategories()
   for (const slug of flatten(categories)) {
-    urls.push({ loc: `${siteUrl}/catalog/${encodeURIComponent(slug)}`, priority: '0.8' })
+    urls.push({ path: `/catalog/${encodeURIComponent(slug)}`, priority: '0.8' })
   }
 
   for (let page = 1; page <= MAX_PAGES; page++) {
     const data = await source.getProducts({ page, page_size: 100, sort: 'name' })
     for (const item of data.items) {
       urls.push({
-        loc: `${siteUrl}/product/${encodeURIComponent(item.slug)}`,
+        path: `/product/${encodeURIComponent(item.slug)}`,
         lastmod: item.updated_at ?? item.created_at,
         priority: '0.7',
       })
@@ -51,14 +52,20 @@ async function buildSitemap() {
     if (page * data.page_size >= data.total) break
   }
 
+  // Every page is listed once per language, each entry naming all its translations.
+  const href = (path, code) => escapeXml(siteUrl + withLang(path, code))
   const body = urls
-    .map(
-      (u) =>
-        `  <url><loc>${escapeXml(u.loc)}</loc>${u.lastmod ? `<lastmod>${escapeXml(u.lastmod.slice(0, 10))}</lastmod>` : ''}<priority>${u.priority}</priority></url>`,
-    )
+    .flatMap((u) => {
+      const alternates = LOCALES.map((l) => `<xhtml:link rel="alternate" hreflang="${l.tag}" href="${href(u.path, l.code)}"/>`)
+      alternates.push(`<xhtml:link rel="alternate" hreflang="x-default" href="${href(u.path, DEFAULT_LOCALE)}"/>`)
+      const lastmod = u.lastmod ? `<lastmod>${escapeXml(u.lastmod.slice(0, 10))}</lastmod>` : ''
+      return LOCALES.map(
+        (l) => `  <url><loc>${href(u.path, l.code)}</loc>${lastmod}<priority>${u.priority}</priority>${alternates.join('')}</url>`,
+      )
+    })
     .join('\n')
 
-  return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${body}\n</urlset>\n`
+  return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n${body}\n</urlset>\n`
 }
 
 export default defineSsrMiddleware(({ app, resolve }) => {

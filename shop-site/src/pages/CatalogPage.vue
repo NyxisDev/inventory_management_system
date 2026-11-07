@@ -11,6 +11,13 @@
         </aside>
 
         <div ref="resultsRef" class="catalog__results">
+          <CategoryChips
+            class="lt-md"
+            :categories="catalog.categories"
+            :active-slug="categorySlug"
+            :filters="filters"
+          />
+
           <div class="catalog__toolbar">
             <q-btn
               outline
@@ -101,14 +108,20 @@
       </div>
     </section>
 
-    <q-dialog v-model="filtersOpen" position="right" full-height>
+    <q-dialog v-model="filtersOpen" position="right" full-height class="side-sheet-dialog">
       <div class="filters-sheet">
         <div class="filters-sheet__head">
           <h2 class="filters-sheet__title">{{ t('catalog.filters') }}</h2>
           <q-btn flat round :icon="mdiClose" :aria-label="t('nav.closeMenu')" @click="filtersOpen = false" />
         </div>
         <div class="filters-sheet__body">
-          <CatalogFilters :categories="catalog.categories" :active-slug="categorySlug" :filters="filters" @change="applyFilters" />
+          <CatalogFilters
+            :categories="catalog.categories"
+            :active-slug="categorySlug"
+            :filters="filters"
+            :show-categories="false"
+            @change="applyFilters"
+          />
         </div>
         <div class="filters-sheet__foot">
           <q-btn
@@ -147,6 +160,7 @@ import PageHeader from '@/components/PageHeader.vue'
 import NotFoundBlock from '@/components/NotFoundBlock.vue'
 import ProductGrid from '@/components/ProductGrid.vue'
 import CatalogFilters from '@/components/catalog/CatalogFilters.vue'
+import CategoryChips from '@/components/catalog/CategoryChips.vue'
 
 defineOptions({
   name: 'CatalogPage',
@@ -247,7 +261,11 @@ usePageMeta(() => {
 
 <style lang="scss" scoped>
 .catalog {
-  padding-top: 40px;
+  padding-top: 32px;
+
+  @media (min-width: 1024px) {
+    padding-top: 40px;
+  }
 
   &__layout {
     display: grid;
@@ -255,19 +273,21 @@ usePageMeta(() => {
     gap: 40px;
 
     @media (min-width: 1024px) {
+      grid-template-columns: 240px minmax(0, 1fr);
+      gap: 32px;
+    }
+
+    @media (min-width: 1200px) {
       grid-template-columns: 260px minmax(0, 1fr);
+      gap: 40px;
     }
   }
 
+  // The sidebar grows with its content and scrolls with the page, so the
+  // category list never gets a scroll bar of its own on short screens.
   &__sidebar {
-    position: sticky;
-    top: calc(#{$header-height} + 24px);
     align-self: start;
-    max-height: calc(100vh - #{$header-height} - 48px);
-    overflow-y: auto;
-    padding-right: 8px;
-    scrollbar-width: thin;
-    scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
+    min-width: 0;
   }
 
   &__toolbar {
@@ -282,7 +302,16 @@ usePageMeta(() => {
     display: flex;
     flex-wrap: wrap;
     gap: 6px;
-    flex: 1;
+    flex: 1 1 auto;
+
+    &:empty {
+      display: none;
+    }
+
+    @media (max-width: 639px) {
+      order: 3;
+      flex-basis: 100%;
+    }
   }
 
   &__chip {
@@ -292,12 +321,15 @@ usePageMeta(() => {
     font-weight: 500;
   }
 
+  // On phones the sort field shares a row with the Filters button.
   &__sort {
-    width: 100%;
+    flex: 1 1 160px;
+    min-width: 0;
     margin-left: auto;
 
-    @media (min-width: 480px) {
-      width: 220px;
+    @media (min-width: 640px) {
+      flex: none;
+      width: 240px;
     }
   }
 
@@ -320,6 +352,15 @@ usePageMeta(() => {
     display: flex;
     justify-content: center;
     margin-top: 40px;
+    max-width: 100%;
+
+    // Page buttons wrap on narrow phones instead of overflowing.
+    :deep(.q-pagination),
+    :deep(.q-pagination__middle) {
+      flex-wrap: wrap;
+      justify-content: center;
+      row-gap: 6px;
+    }
 
     :deep(.q-btn) {
       min-width: 40px;

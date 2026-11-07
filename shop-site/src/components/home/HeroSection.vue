@@ -4,7 +4,6 @@
     <div class="hero__overlay" aria-hidden="true" />
 
     <div class="container hero__inner">
-      <p class="eyebrow hero__eyebrow">{{ t('home.heroEyebrow') }}</p>
       <h1 id="hero-title" class="hero__title">
         <span>{{ t('home.heroTitleLine1') }}</span>
         <span class="text-orange">{{ t('home.heroTitleLine2') }}</span>
@@ -26,15 +25,12 @@
         />
         <q-btn outline no-caps class="btn btn--outline" :to="{ name: 'contacts' }" :label="t('home.contactUs')" />
       </div>
-    </div>
-
-    <div class="container hero__stats-wrap">
-      <dl class="hero__stats">
-        <div v-for="stat in stats" :key="stat.label" class="hero__stat">
-          <dt>{{ stat.label }}</dt>
-          <dd>{{ stat.value }}</dd>
-        </div>
-      </dl>
+      <p v-if="facts.length" class="hero__facts">
+        <template v-for="(fact, i) in facts" :key="fact">
+          <span v-if="i > 0" class="hero__dot" aria-hidden="true">•</span>
+          <span>{{ fact }}</span>
+        </template>
+      </p>
     </div>
   </section>
 </template>
@@ -54,13 +50,13 @@ const { t, tm, rt } = useI18n()
 
 const points = computed(() => tm('home.heroPoints').map((p) => rt(p)))
 
-const stats = computed(() =>
+// Real counts from the catalog, shown as a quiet line under the buttons.
+const facts = computed(() =>
   [
-    { value: props.products, label: t('home.statsProducts') },
-    { value: props.categories, label: t('home.statsCategories') },
-    { value: props.warehouses, label: t('home.statsWarehouses') },
-    { value: t('home.statsLive'), label: t('home.statsUpdated') },
-  ].filter((s) => s.value),
+    props.products && t('home.factsProducts', props.products),
+    props.categories && t('home.factsCategories', props.categories),
+    props.warehouses && t('home.factsWarehouses', props.warehouses),
+  ].filter(Boolean),
 )
 </script>
 
@@ -106,22 +102,14 @@ const stats = computed(() =>
     animation: hero-in 0.8s ease-out both;
   }
 
-  &__eyebrow {
-    &::after {
-      content: '';
-      width: 24px;
-      height: 2px;
-      background: $primary;
-      border-radius: 2px;
-    }
-  }
-
   &__title {
     display: flex;
     flex-direction: column;
     max-width: 900px;
-    font-size: clamp(2.4rem, 7vw, 4.25rem);
-    line-height: 1.04;
+    font-size: clamp(2.1rem, 7vw, 4.25rem);
+    line-height: 1.06;
+    overflow-wrap: anywhere;
+    text-wrap: balance;
   }
 
   &__subtitle {
@@ -129,7 +117,7 @@ const stats = computed(() =>
     flex-wrap: wrap;
     justify-content: center;
     gap: 6px 14px;
-    max-width: 680px;
+    max-width: 100%;
     margin-top: 24px;
     font-size: clamp(1rem, 2.2vw, 1.1875rem);
     color: #cbd5e1;
@@ -137,6 +125,19 @@ const stats = computed(() =>
 
   &__dot {
     color: $primary;
+  }
+
+  // Below 1100px the points stack, so a separator never hangs at the end of a line.
+  @media (max-width: 1099px) {
+    &__subtitle,
+    &__facts {
+      flex-direction: column;
+      align-items: center;
+    }
+
+    &__dot {
+      display: none;
+    }
   }
 
   &__actions {
@@ -150,56 +151,23 @@ const stats = computed(() =>
       min-height: 54px;
       padding: 0 28px;
     }
-  }
 
-  &__stats-wrap {
-    padding-bottom: 40px;
-  }
-
-  &__stats {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    margin: 0;
-    border: 1px solid $color-border;
-    border-radius: $radius-card;
-    background: rgba(21, 29, 48, 0.72);
-    backdrop-filter: blur(10px);
-    overflow: hidden;
-
-    @media (min-width: 768px) {
-      grid-template-columns: repeat(4, minmax(0, 1fr));
+    @media (max-width: 479px) {
+      flex-direction: column;
+      align-self: stretch;
     }
   }
 
-  &__stat {
+  &__facts {
     display: flex;
-    flex-direction: column-reverse;
-    gap: 2px;
-    padding: 18px 20px;
-    border-right: 1px solid $color-border;
-    border-bottom: 1px solid $color-border;
-
-    dt {
-      font-size: 0.875rem;
-      color: $color-text-muted;
-    }
-
-    dd {
-      margin: 0;
-      font-family: $font-heading;
-      font-weight: 700;
-      font-size: clamp(1.5rem, 3vw, 2rem);
-      color: $color-text;
-      line-height: 1.1;
-    }
-
-    @media (min-width: 768px) {
-      border-bottom: 0;
-
-      &:last-child {
-        border-right: 0;
-      }
-    }
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 4px 12px;
+    margin-top: 32px;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    color: $color-text-muted;
+    font-variant-numeric: tabular-nums;
   }
 }
 
