@@ -1,0 +1,54 @@
+# Tool configuration for the backend. Dependencies stay in requirements*.txt.
+# Run the checks from the repository root: bash scripts/check.sh
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+extend-exclude = ["alembic/versions"]
+
+[tool.ruff.lint]
+select = [
+    "E", "W",   # pycodestyle
+    "F",        # pyflakes
+    "I",        # import order
+    "B",        # bugbear
+    "UP",       # pyupgrade
+    "S",        # bandit: security (asserts, hardcoded secrets, weak hashes, SQL strings)
+    "ASYNC",    # blocking calls inside async code
+    "DTZ",      # naive datetimes: all timestamps are timezone-aware (TIMESTAMPTZ)
+    "T20",      # no print(): use logging
+    "C4",       # comprehensions
+    "SIM",      # simplifications
+    "PT",       # pytest style
+    "RET",      # return statements
+    "RUF",      # ruff-specific
+    "FAST",     # FastAPI
+    "PERF",     # performance
+]
+ignore = [
+    "RUF001", "RUF002", "RUF003",  # Cyrillic text in comments and strings is allowed
+]
+
+[tool.ruff.lint.flake8-bugbear]
+# FastAPI dependencies are called in argument defaults by design
+extend-immutable-calls = [
+    "fastapi.Depends", "fastapi.Query", "fastapi.Path", "fastapi.Body",
+    "fastapi.Header", "fastapi.Cookie", "fastapi.File", "fastapi.Form", "fastapi.Security",
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["S101", "S105", "S106", "S311"]  # asserts and test passwords are fine in tests
+"app/seed.py" = ["T20"]                         # CLI script may print its result
+
+[tool.ruff.format]
+quote-style = "double"
+
+[tool.ty.environment]
+python-version = "3.12"
+
+[tool.ty.src]
+include = ["app", "tests", "alembic"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]

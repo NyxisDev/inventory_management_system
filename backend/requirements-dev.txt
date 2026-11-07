@@ -1,0 +1,4 @@
+# Development tools (checks). Installed in addition to requirements.txt.
+# Pin the test packages (pytest, pytest-asyncio, pip-audit) when part 2 adds them.
+ruff==0.17.4
+ty==0.0.98

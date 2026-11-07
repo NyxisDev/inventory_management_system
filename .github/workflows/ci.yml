@@ -1,0 +1,37 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install backend tools and dependencies
+        run: |
+          pip install -r backend/requirements-dev.txt
+          if [ -f backend/requirements.txt ]; then pip install -r backend/requirements.txt; fi
+
+      - name: Install frontend dependencies
+        run: |
+          for app in admin-app shop-site; do
+            if [ -f "$app/package-lock.json" ]; then (cd "$app" && npm ci); fi
+          done
+
+      - name: Run checks
+        run: bash scripts/check.sh

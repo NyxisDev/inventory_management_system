@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "deny": [
+      "Read(./.agents/skills/**/data/**)",
+      "Read(./.claude/skills/**/data/**)",
+      "Read(./.agents/skills/impeccable/scripts/**)",
+      "Read(./.claude/skills/impeccable/scripts/**)",
+      "Read(**/node_modules/**)",
+      "Read(**/dist/**)",
+      "Read(./media/**)",
+      "Read(./backups/**)"
+    ]
+  }
+}

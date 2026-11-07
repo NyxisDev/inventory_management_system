@@ -10,6 +10,7 @@ __pycache__/
 venv/
 .pytest_cache/
 .mypy_cache/
+.ruff_cache/
 .coverage
 htmlcov/
 
@@ -22,6 +23,14 @@ npm-debug.log*
 # Uploaded media and backups
 media/
 backups/
+
+# Local AI agent skills and tool state (installed per machine)
+.agents/
+.claude/skills/
+.claude/settings.local.json
+.impeccable/
+.playwright-mcp/
+skills-lock.json
 
 # OS / editors
 .DS_Store

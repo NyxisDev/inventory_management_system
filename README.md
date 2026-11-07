@@ -25,6 +25,15 @@ shop-site/   Quasar SSR public catalog
 
 Passwords are stored as hashes. Access tokens are short-lived JWTs, and refresh tokens are rotated and kept in httpOnly cookies. Roles are checked on the backend. The audit log is append-only. Uploaded images are validated, and security headers are set.
 
+## Checks
+
+```bash
+pip install -r backend/requirements-dev.txt   # ruff and ty
+bash scripts/check.sh                         # ruff, ty and the frontend linters (--fix, --security)
+```
+
+The same checks run in GitHub Actions on every push and pull request.
+
 ## Status
 
 Early development. See [ROADMAP.md](ROADMAP.md).
